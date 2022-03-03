@@ -119,20 +119,34 @@ public final class FileHandler {
 	}
 
 	/**
-	 * Get the first Object from a File
+	 * Get the first Object from a File by FileName
 	 * 
 	 * @param fname is the filename (including path) of the destination
 	 * 
 	 * @return the read object or null if an Exception occurred.
 	 */
 	public static Object getFirstObjectFromFile(String fname) {
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fname));) {
+		return getFirstObjectFromFile(new File(fname));
+	}
+	
+	/**
+	 * Get the first Object from a File
+	 * 
+	 * @param fname is the filename (including path) of the destination
+	 * 
+	 * @return the read object or null if an Exception occurred.
+	 */
+	public static Object getFirstObjectFromFile(File file) {
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));) {
 			return ois.readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;
 		}
+		
+		
 	}
+	
 
 	/**
 	 * Generates a Filename

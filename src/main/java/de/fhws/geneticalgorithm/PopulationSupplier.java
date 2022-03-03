@@ -1,4 +1,7 @@
 package de.fhws.geneticalgorithm;
 
-public interface PopulationSupplier {
+import java.util.function.Supplier;
+
+public interface PopulationSupplier<T extends Solution> extends Supplier<Population<T>>{
+
 }
