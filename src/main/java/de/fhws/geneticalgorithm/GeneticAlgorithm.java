@@ -27,8 +27,11 @@ public class GeneticAlgorithm<T extends Solution> {
 	}
 	
 	public T solve() {
+		population.calcFitnesses();
+		logger.ifPresent(logger -> logger.log(maxGens, population));
 		for(int i = population.getGeneration(); i < maxGens; i++) {
 			nextGen();
+			population.calcFitnesses();
 			saver.ifPresent(saver -> saver.save(population));
 			logger.ifPresent(logger -> logger.log(maxGens , population));
 		}
@@ -38,7 +41,6 @@ public class GeneticAlgorithm<T extends Solution> {
 
 	
 	private void nextGen() {
-		population.calcFitnesses();
 		selector.select(population);
 		recombiner.recombine(population, size);
 		mutator.mutate(population);
