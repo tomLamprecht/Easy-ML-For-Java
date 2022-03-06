@@ -1,6 +1,6 @@
 package de.fhws.geneticalgorithm;
 
-public interface Mutator <T extends Solution>{
+public interface Mutator <T extends Individual>{
 
 	void mutate(Population<T> pop);
 	

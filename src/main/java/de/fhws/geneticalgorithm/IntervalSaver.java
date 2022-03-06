@@ -17,7 +17,7 @@ class IntervalSaver {
 		this.dir = dir;
 	}
 
-	public void save(Population<? extends Solution> pop) {
+	public void save(Population<? extends Individual> pop) {
 		
 		if(intervall % counter != 0)
 			FileHandler.writeObjectToAGeneratedFileLocation(pop, "population", dir.getAbsolutePath(), !override, ".ser", true);

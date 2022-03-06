@@ -1,9 +1,12 @@
 package de.fhws.geneticalgorithm;
 
+import de.fhws.geneticalgorithm.logger.Logger;
+import de.fhws.geneticalgorithm.selector.Selector;
+
 import java.io.File;
 import java.util.Optional;
 
-public class GeneticAlgorithm<T extends Solution> {
+public class GeneticAlgorithm<T extends Individual> {
 	
 	private final int size;
 	private final Population<T> population;
@@ -52,7 +55,7 @@ public class GeneticAlgorithm<T extends Solution> {
 	
 	
 	
-	public static class Builder<T extends Solution> {
+	public static class Builder<T extends Individual> {
 		
 		private PopulationSupplier<T> popSupplier;
 		private Selector selector;
