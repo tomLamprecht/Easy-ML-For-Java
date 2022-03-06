@@ -1,6 +1,7 @@
 package de.fhws.linearalgebra;
 
 import java.util.Arrays;
+import java.util.function.DoubleUnaryOperator;
 
 public class Matrix {
 
@@ -40,7 +41,7 @@ public class Matrix {
     /**
      * randomizes this matrix
      * @param range the range in which the random numbers should be (abs from 0)
-     * @param negative if {@code true} the numbers will also be negative (but always > -range)
+     * @param negative if {@code true} the numbers will also be negated (between ]-range ; range[)
      */
     public void randomize( double range, boolean negative) {
         for (int i = 0; i < getNumRows(); i++) {
@@ -51,6 +52,18 @@ public class Matrix {
                 data[i][j] = value;
             }
         }
+    }
+    
+    /**
+     * applies the {@code func} on every element
+     * @param func that should be applied
+     */
+    public void applyActivation(DoubleUnaryOperator func) {
+    	for (int i = 0; i < data.length; i++) {
+			for (int j = 0; j < data[i].length; j++) {
+				data[i][j] = func.applyAsDouble(data[i][j]);
+			}
+		}
     }
 
     /**
