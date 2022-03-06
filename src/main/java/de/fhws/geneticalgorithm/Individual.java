@@ -2,15 +2,15 @@ package de.fhws.geneticalgorithm;
 
 import java.io.Serializable;
 
-public interface Solution extends Comparable<Solution>, Serializable{
+public interface Individual extends Comparable<Individual>, Serializable{
 	
      void calcFitness();
      
      double getFitness();
      
-     Solution copy();
+     Individual copy();
      
-     default int compareTo(Solution o) {
+     default int compareTo(Individual o) {
  		if (getFitness() - o.getFitness() == 0)
 			return 0;
 		else

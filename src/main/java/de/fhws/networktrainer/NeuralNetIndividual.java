@@ -1,4 +1,4 @@
 package de.fhws.networktrainer;
 
-public interface NetworkSolution {
+public class NeuralNetIndividual {
 }

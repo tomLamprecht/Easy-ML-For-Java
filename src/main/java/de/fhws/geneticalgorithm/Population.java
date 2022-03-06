@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class Population <T extends Solution> implements Serializable {
-	private List<T> solutions;
+public class Population <T extends Individual> implements Serializable {
+	private List<T> individuals;
 
 	private int generation;
 	
 	void calcFitnesses() {
-		solutions.forEach(Solution::calcFitness);
+		individuals.forEach(Individual::calcFitness);
 	}
 	
 	/**
@@ -18,20 +18,20 @@ public class Population <T extends Solution> implements Serializable {
 	 * It uses the compareTo method of the solutions for this.
 	 */
 	public void sortPopByFitness() {
-		Collections.sort(solutions);
-		Collections.reverse(solutions);
+		Collections.sort(individuals);
+		Collections.reverse(individuals);
 	}
 	
 	public int getSize() {
-		return solutions.size();
+		return individuals.size();
 	}
 	
 	public T getBest() {
-		return Collections.max(solutions);
+		return Collections.max(individuals);
 	}
 	
 	public double getAverageFitness() {
-		return solutions.stream().mapToDouble(Solution::getFitness).average().getAsDouble();
+		return individuals.stream().mapToDouble(Individual::getFitness).average().getAsDouble();
 	}
 	
 	public int getGeneration() {
@@ -42,14 +42,14 @@ public class Population <T extends Solution> implements Serializable {
 		generation++;
 	}
 	
-	public List<T> getSolutions() {
-		return solutions;
+	public List<T> getIndividuals() {
+		return individuals;
 	}
 	
-	public void setSolutions(List<T> solutions) {
-		if(solutions == null)
+	public void setIndividuals(List<T> individuals) {
+		if(individuals == null)
 			throw new NullPointerException("solutions can't be null");
-		this.solutions = solutions;
+		this.individuals = individuals;
 	}
 	
 }
