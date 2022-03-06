@@ -1,4 +1,7 @@
 package de.fhws.networks;
 
-public interface ActivationFunction {
+import java.io.Serializable;
+import java.util.function.DoubleUnaryOperator;
+
+public interface ActivationFunction extends DoubleUnaryOperator, Serializable {
 }

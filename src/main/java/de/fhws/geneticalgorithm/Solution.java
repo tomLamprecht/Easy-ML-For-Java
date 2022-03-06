@@ -6,11 +6,11 @@ public interface Solution extends Comparable<Solution>, Serializable{
 	
      void calcFitness();
      
-     public double getFitness();
+     double getFitness();
      
-     public Solution copy();
+     Solution copy();
      
-     public default int compareTo(Solution o) {
+     default int compareTo(Solution o) {
  		if (getFitness() - o.getFitness() == 0)
 			return 0;
 		else

@@ -1,4 +1,7 @@
 package de.fhws.networks;
 
-public interface Network {
+import de.fhws.linearalgebra.Vector;
+
+public interface Network<T> {
+    Vector calcOutput(T t);
 }
