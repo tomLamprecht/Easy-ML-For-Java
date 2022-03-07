@@ -15,10 +15,6 @@ public class EliteSelector<T extends Individual<T>> extends PercentageSelector<T
         int goalSize = super.calcGoalSize(pop.getSize());
         while (pop.getSize() > goalSize)
             pop.getIndividuals().remove(goalSize);
-
-        pop.getIndividuals().add(pop.getIndividuals().get(0));
-
-        pop.getIndividuals().add(pop.getIndividuals().get(0).copy());
     }
 
 }
