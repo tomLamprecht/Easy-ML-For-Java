@@ -1,6 +1,7 @@
 package de.fhws.linearalgebra;
 
 import java.util.Arrays;
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 public class Vector {
@@ -16,6 +17,10 @@ public class Vector {
     }
 
 
+    /**
+     * creates a vector with a copy of the data.
+     * @param data initial values
+     */
     public Vector(double[] data) {
         if(data.length <= 0)
             throw new IllegalArgumentException("data length must be greater than 0");
@@ -43,38 +48,37 @@ public class Vector {
     /**
      * adds the given vector to this vector
      *
-     * @param v the vector which is added on this vector
+     * @param other the vector which is added on this vector
      * @return the result of the addition
      */
-    public Vector add(Vector v) {
-        if (v.size() != this.size())
-            throw new IllegalArgumentException("vectors must be of the same length");
-        double[] retData = new double[v.data.length];
-        for (int i = 0; i < retData.length; i++) {
-            retData[i] = this.data[i] + v.data[i];
-        }
-        return new Vector(retData);
+    public Vector add(Vector other) {
+        applyOperator(other, Double::sum);
+        return this;
     }
 
     /**
      * subtracts the given vector from this vector
      *
-     * @param v the vector which is subtracted from this vector
+     * @param other the vector which is subtracted from this vector
      * @return the result of the subtraction
      */
-    public Vector sub(Vector v) {
-        if (v.size() != this.size())
+    public Vector sub(Vector other) {
+        applyOperator(other, (d1, d2) -> d1 - d2);
+        return this;
+    }
+
+    public void applyOperator(Vector other, DoubleBinaryOperator op) {
+        if (other.size() != this.size())
             throw new IllegalArgumentException("vectors must be of the same length");
-        double[] retData = new double[v.data.length];
-        for (int i = 0; i < retData.length; i++) {
-            retData[i] = this.data[i] - v.data[i];
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = op.applyAsDouble(this.data[i], other.data[i]);
         }
-        return new Vector(retData);
     }
 
     /**
      * applies the DoubleUnaryOperator (Function with Double accepted and Double
-     * returned) to this vector, so on every value
+     * returned) to this vector, on every value
      *
      * @param function function which is applied to every value of the vector
      * @return this vector, after the function was applied
