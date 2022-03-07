@@ -3,7 +3,7 @@ package de.fhws.geneticalgorithm.selector;
 import de.fhws.geneticalgorithm.Population;
 import de.fhws.geneticalgorithm.Individual;
 
-public interface Selector {
+public interface Selector<T extends Individual<T>> {
 	
-	void select(Population<? extends Individual> pop);
+	void select(Population<T> pop);
 }
