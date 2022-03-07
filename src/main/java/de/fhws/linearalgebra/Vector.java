@@ -32,16 +32,11 @@ public class Vector {
     /**
      * randomizes this vector
      *
-     * @param range    the range in which the random numbers should be (abs from 0)
-     * @param negative if {@code true} the numbers will also be negative (but always
-     *                 > -range)
+     * @param randomizer given randomizer, that holds the range
      */
-    public void randomize(double range, boolean negative) {
+    public void randomize(Randomizer randomizer) {
         for (int i = 0; i < data.length; i++) {
-            double value = Math.random() * range;
-            if (negative && Math.random() < 0.5)
-                value *= -1;
-            data[i] = value;
+            data[i] = randomizer.getInRange();
         }
     }
 

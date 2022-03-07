@@ -39,16 +39,12 @@ public class Matrix {
 
     /**
      * randomizes this matrix
-     * @param range the range in which the random numbers should be (abs from 0)
-     * @param negative if {@code true} the numbers will also be negated (between ]-range ; range[)
+     * @param randomizer given randomizer, that holds the range
      */
-    public void randomize( double range, boolean negative) {
+    public void randomize(Randomizer randomizer) {
         for (int i = 0; i < getNumRows(); i++) {
             for (int j = 0; j < getNumCols(); j++) {
-                double value = Math.random() * range;
-                if(negative && Math.random() < 0.5)
-                    value *= -1;
-                data[i][j] = value;
+                data[i][j] = randomizer.getInRange();
             }
         }
     }
