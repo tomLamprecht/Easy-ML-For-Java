@@ -4,7 +4,7 @@ import java.io.File;
 
 import de.fhws.filehandler.FileHandler;
 
-public class PopulationByFileSupplier<T extends Individual> implements PopulationSupplier<T>{
+public class PopulationByFileSupplier<T extends Individual<T>> implements PopulationSupplier<T>{
 
 	private File fname;
 	
