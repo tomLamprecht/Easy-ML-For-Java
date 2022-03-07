@@ -18,7 +18,6 @@ public class Matrix {
         this.data = new double[rows][cols];
         for(int i = 0; i < this.data.length; i++) {
             this.data[i] = new double[data[i].length];
-            Arrays.fill(this.data[i], 0);
         }
     }
 
@@ -65,6 +64,22 @@ public class Matrix {
 			}
 		}
     }
+
+    
+    /**
+     * Gets the highest double of the data matrix.
+     * @return the highest number
+     */
+	public double getHighestNumber() {
+		double record = Double.NEGATIVE_INFINITY;
+		for (int i = 0; i < data.length; i++) {
+			for (int j = 0; j < data[i].length; j++) {
+				if(get(i,j) > record)
+					record = get(i,j);
+			}
+		}
+		return record;
+	}
 
     /**
      * gets the double value in the specified row and column
