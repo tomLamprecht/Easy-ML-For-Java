@@ -1,6 +1,8 @@
 package de.fhws.geneticalgorithm.selector;
 
-public abstract class PercentageSelector implements Selector {
+import de.fhws.geneticalgorithm.Individual;
+
+public abstract class PercentageSelector<T extends Individual<T>> implements Selector<T> {
     private double percent;
 
     public PercentageSelector(double percent) {

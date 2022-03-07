@@ -6,11 +6,11 @@ import de.fhws.geneticalgorithm.selector.Selector;
 import java.io.File;
 import java.util.Optional;
 
-public class GeneticAlgorithm<T extends Individual> {
+public class GeneticAlgorithm<T extends Individual<T>> {
 	
 	private final int size;
 	private final Population<T> population;
-	private final Selector selector;
+	private final Selector<T> selector;
 	private final Recombiner<T> recombiner;
 	private final Mutator<T> mutator;
 	private final int maxGens;
@@ -18,7 +18,7 @@ public class GeneticAlgorithm<T extends Individual> {
 	private final Optional<IntervalSaver> saver;
 	private final Optional<Logger> logger;
 	
-	public GeneticAlgorithm(Selector selector, Recombiner<T> recombiner, Mutator<T> mutator, PopulationSupplier<T> popSupplier, int maxGens, Optional<IntervalSaver> saver, Optional<Logger> logger) {
+	public GeneticAlgorithm(Selector<T> selector, Recombiner<T> recombiner, Mutator<T> mutator, PopulationSupplier<T> popSupplier, int maxGens, Optional<IntervalSaver> saver, Optional<Logger> logger) {
 		this.selector = selector;
 		this.recombiner = recombiner;
 		this.mutator = mutator;
@@ -42,7 +42,7 @@ public class GeneticAlgorithm<T extends Individual> {
 	}
 	
 
-	
+
 	private void nextGen() {
 		selector.select(population);
 		recombiner.recombine(population, size);
@@ -55,10 +55,10 @@ public class GeneticAlgorithm<T extends Individual> {
 	
 	
 	
-	public static class Builder<T extends Individual> {
+	public static class Builder<T extends Individual<T>> {
 		
 		private PopulationSupplier<T> popSupplier;
-		private Selector selector;
+		private Selector<T> selector;
 		private Recombiner<T> recombiner;
 		private Mutator<T> mutator;
 		private int maxGens;
@@ -66,7 +66,7 @@ public class GeneticAlgorithm<T extends Individual> {
 		private IntervalSaver saver;
 		private Logger logger;
 		
-		public Builder (Selector selector, Recombiner<T> recombiner, Mutator<T> mutator, PopulationSupplier<T> popSupplier, int maxGens)
+		public Builder (Selector<T> selector, Recombiner<T> recombiner, Mutator<T> mutator, PopulationSupplier<T> popSupplier, int maxGens)
 		{
 			this.selector = selector;
 			this.recombiner = recombiner;
@@ -79,7 +79,7 @@ public class GeneticAlgorithm<T extends Individual> {
 		* used to save populations to file
 		*
 		* @param dir is a directory where the population will be saved in
-		* @param intervall is the interval of which the populations should be saved
+		* @param interval is the interval of which the populations should be saved
 		* @param override determines whether a new file should be created each time or the old one overridden
 		* 
 		* @return Builder for the Builder pattern
