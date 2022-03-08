@@ -2,6 +2,7 @@ package de.fhws.geneticalgorithm;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,6 +50,11 @@ public final class Population <T extends Individual<T>> implements Serializable 
 
 	public int getSize() {
 		return individuals.size();
+	}
+
+	public void replaceAllIndividuals(Collection<Individual<T>> collection) {
+		individuals.clear();
+		collection.forEach(ind -> individuals.add(ind.copy()));
 	}
 
 	public List<T> getIndividuals() {

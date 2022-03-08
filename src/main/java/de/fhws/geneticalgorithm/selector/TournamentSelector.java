@@ -33,9 +33,7 @@ public class TournamentSelector<T extends Individual<T>> extends PercentageSelec
                 newIndividuals.add(newOne);
             }
 
-            pop.getIndividuals().clear();
-            for(Individual<T> individual : newIndividuals)
-                pop.getIndividuals().add(individual.copy());
+            pop.replaceAllIndividuals(newIndividuals);
         }
 
     }
