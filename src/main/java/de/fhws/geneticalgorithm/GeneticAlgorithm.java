@@ -5,6 +5,7 @@ import de.fhws.geneticalgorithm.selector.Selector;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.function.IntConsumer;
 
 public class GeneticAlgorithm<T extends Individual<T>> {
 	
@@ -15,20 +16,23 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 	private final Optional<Recombiner<T>> recombiner;
 	private final Optional<Mutator<T>> mutator;
 
+	private Optional<IntConsumer> genPreperator;
 	private final Optional<IntervalSaver> saver;
 	private final Optional<Logger> logger;
-	
-	public GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens,  Selector<T> selector, Optional<Recombiner<T>> recombiner, Optional<Mutator<T>> mutator, Optional<IntervalSaver> saver, Optional<Logger> logger) {
-		this.selector = selector;
-		this.recombiner = recombiner;
-		this.mutator = mutator;
+
+
+	public GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens,  Selector<T> selector, Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger) {
 		this.population = popSupplier.get();
-		this.size = population.getSize();
 		this.maxGens = maxGens + population.getGeneration();
-		this.saver = saver;
-		this.logger = logger;
+		this.size = population.getSize();
+		this.selector = selector;
+		this.recombiner = Optional.ofNullable(recombiner);
+		this.mutator = Optional.ofNullable(mutator);
+		this.genPreperator = Optional.ofNullable(genPreperator);
+		this.saver = Optional.ofNullable(saver);
+		this.logger = Optional.ofNullable(logger);
 	}
-	
+
 	public T solve() {
 		population.calcFitnesses();
 		logger.ifPresent(logger -> logger.log(maxGens, population));
@@ -44,6 +48,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
 
 	private void nextGen() {
+		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
 		selector.select(population);
 		recombiner.ifPresent(r -> r.recombine(population, size));
 		size = population.getSize();
@@ -59,15 +64,16 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 	public static class Builder<T extends Individual<T>> {
 
 
+		private int maxGens;
 		private PopulationSupplier<T> popSupplier;
 		private Selector<T> selector;
 		private Recombiner<T> recombiner;
 		private Mutator<T> mutator;
-		private int maxGens;
-		
+
+		private IntConsumer genPreperator;
 		private IntervalSaver saver;
 		private Logger logger;
-		
+
 		public Builder (PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector) {
 			this.selector = selector;
 			this.maxGens = maxGens;
@@ -81,6 +87,11 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
 		public Builder<T> withMutator(Mutator<T> mutator) {
 			this.mutator = mutator;
+			return this;
+		}
+
+		public Builder<T> withGenPreperator(IntConsumer genPreperator) {
+			this.genPreperator = genPreperator;
 			return this;
 		}
 		
@@ -104,7 +115,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 		}
 
 		public GeneticAlgorithm<T> build(){
-			return new GeneticAlgorithm<T>( popSupplier, maxGens, selector, Optional.ofNullable(recombiner), Optional.ofNullable(mutator), Optional.ofNullable(saver), Optional.ofNullable(logger));
+			return new GeneticAlgorithm<T>( popSupplier, maxGens, selector, recombiner, mutator, genPreperator, saver, logger);
 		}
 	}
 
