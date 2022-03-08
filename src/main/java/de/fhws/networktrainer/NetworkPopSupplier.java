@@ -1,4 +1,6 @@
 package de.fhws.networktrainer;
 
-public interface NetworkPopSupplier {
+import de.fhws.geneticalgorithm.PopulationSupplier;
+
+public interface NetworkPopSupplier<T extends NetworkIndividual<?, T>> extends PopulationSupplier<T> {
 }
