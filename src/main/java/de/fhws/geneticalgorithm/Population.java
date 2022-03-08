@@ -1,6 +1,7 @@
 package de.fhws.geneticalgorithm;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,13 +9,21 @@ public final class Population <T extends Individual<T>> implements Serializable 
 	private List<T> individuals;
 
 	private int generation;
+
+	public Population() {
+		this.individuals = new ArrayList<>();
+	}
+
+	public Population(List<T> individuals) {
+		this.individuals = new ArrayList<>(individuals);
+	}
 	
 	void calcFitnesses() {
 		individuals.forEach(Individual::calcFitness);
 	}
 	
 	/**
-	 * sorts the population in DESCANDING order.
+	 * sorts the population in DESCENDING order.
 	 * It uses the compareTo method of the solutions for this.
 	 */
 	public void sortPopByFitness() {

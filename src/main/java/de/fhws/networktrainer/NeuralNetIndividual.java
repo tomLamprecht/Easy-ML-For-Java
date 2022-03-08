@@ -15,6 +15,10 @@ public class NeuralNetIndividual implements NetworkIndividual<Vector, NeuralNetI
     }
 
 
+    public NeuralNet getNN() {
+        return neuralNet;
+    }
+
     @Override
     public void calcFitness() {
         fitness = fitnessFunction.applyAsDouble(neuralNet);

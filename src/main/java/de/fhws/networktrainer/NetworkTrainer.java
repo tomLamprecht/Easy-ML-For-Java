@@ -4,7 +4,7 @@ import de.fhws.geneticalgorithm.GeneticAlgorithm;
 
 public class NetworkTrainer<T extends NetworkIndividual<?, T>> {
 
-    private final GeneticAlgorithm<T> genAlg;
+    private GeneticAlgorithm<T> genAlg;
 
     public NetworkTrainer(GeneticAlgorithm<T> genAlg) {
         this.genAlg = genAlg;

@@ -68,7 +68,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 		private IntervalSaver saver;
 		private Logger logger;
 		
-		public Builder (Selector<T> selector, PopulationSupplier<T> popSupplier, int maxGens) {
+		public Builder (PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector) {
 			this.selector = selector;
 			this.maxGens = maxGens;
 			this.popSupplier = popSupplier;
