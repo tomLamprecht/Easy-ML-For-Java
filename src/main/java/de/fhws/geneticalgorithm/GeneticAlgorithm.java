@@ -34,6 +34,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 	}
 
 	public T solve() {
+		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
 		population.calcFitnesses();
 		logger.ifPresent(logger -> logger.log(maxGens, population));
 		for(int i = population.getGeneration(); i < maxGens; i++) {
