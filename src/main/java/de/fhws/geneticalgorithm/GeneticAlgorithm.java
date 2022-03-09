@@ -5,6 +5,8 @@ import de.fhws.geneticalgorithm.selector.Selector;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.IntConsumer;
 
 public class GeneticAlgorithm<T extends Individual<T>> {
@@ -20,8 +22,9 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 	private final Optional<IntervalSaver> saver;
 	private final Optional<Logger> logger;
 
+	private Optional<ExecutorService> executor = Optional.empty();
 
-	public GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens,  Selector<T> selector, Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger) {
+	private GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens,  Selector<T> selector, Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger, int amountThreads) {
 		this.population = popSupplier.get();
 		this.maxGens = maxGens + population.getGeneration();
 		this.size = population.getSize();
@@ -31,18 +34,24 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 		this.genPreperator = Optional.ofNullable(genPreperator);
 		this.saver = Optional.ofNullable(saver);
 		this.logger = Optional.ofNullable(logger);
+
+		if(amountThreads > 1)
+			executor = Optional.of(Executors.newFixedThreadPool(amountThreads));
+
 	}
 
 	public T solve() {
 		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
-		population.calcFitnesses();
+		population.calcFitnesses(executor);
 		logger.ifPresent(logger -> logger.log(maxGens, population));
+
 		for(int i = population.getGeneration(); i < maxGens; i++) {
 			nextGen();
-			population.calcFitnesses();
+			population.calcFitnesses(executor);
 			saver.ifPresent(saver -> saver.save(population));
 			logger.ifPresent(logger -> logger.log(maxGens , population));
 		}
+
 		return population.getBest();
 	}
 	
@@ -74,6 +83,8 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 		private IntConsumer genPreperator;
 		private IntervalSaver saver;
 		private Logger logger;
+
+		private int amountThreads;
 
 		public Builder (PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector) {
 			this.selector = selector;
@@ -115,8 +126,15 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 			return this;
 		}
 
+		public Builder<T> withMutliThreaded(int amountThreads) {
+			if(amountThreads < 1)
+				throw new IllegalArgumentException("amount of threads must be in at least 1");
+			this.amountThreads = amountThreads;
+			return this;
+		}
+
 		public GeneticAlgorithm<T> build(){
-			return new GeneticAlgorithm<T>( popSupplier, maxGens, selector, recombiner, mutator, genPreperator, saver, logger);
+			return new GeneticAlgorithm<T>(popSupplier, maxGens, selector, recombiner, mutator, genPreperator, saver, logger, amountThreads);
 		}
 	}
 

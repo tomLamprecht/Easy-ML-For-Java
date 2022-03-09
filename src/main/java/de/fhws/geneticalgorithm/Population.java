@@ -1,10 +1,10 @@
 package de.fhws.geneticalgorithm;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public final class Population <T extends Individual<T>> implements Serializable {
 	private List<T> individuals;
@@ -19,8 +19,20 @@ public final class Population <T extends Individual<T>> implements Serializable 
 		this.individuals = new ArrayList<>(individuals);
 	}
 	
-	void calcFitnesses() {
-		individuals.forEach(Individual::calcFitness);
+	void calcFitnesses(Optional<ExecutorService> executor) {
+		executor.ifPresentOrElse(exec -> {
+			List<Future<?>> futures = new ArrayList<>(individuals.size());
+			individuals.forEach(ind -> futures.add(exec.submit(ind::calcFitness)));
+			futures.forEach(f -> {
+				try {
+					f.get();
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+			});
+		},
+		() -> individuals.forEach(Individual::calcFitness));
+
 	}
 	
 	/**
