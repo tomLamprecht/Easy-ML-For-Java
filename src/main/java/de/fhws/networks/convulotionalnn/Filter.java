@@ -16,6 +16,11 @@ public class Filter {
 		this.filter = new Matrix(size, size);
 	}
 	
+	private Filter(Matrix filter, double bias) {
+		this.filter = filter;
+		this.bias = bias;
+	}
+
 	public static Filter generateRandomFilter(int size, Randomizer rand, Randomizer randBias) {
 		Filter filter = new Filter(size);
 		for(int i = 0; i < size; i++) {
@@ -27,6 +32,7 @@ public class Filter {
 		return filter;
 	}
 	
+	
 	public double get(int row, int col) {
 		return filter.get(row, col);
 	}
@@ -37,6 +43,14 @@ public class Filter {
 	
 	public double getBias() {
 		return this.bias;
+	}
+	
+	public void setBias(double bias) {
+		this.bias = bias;
+	}
+	
+	public Filter copy() {
+		return new Filter(filter.copy(), bias);
 	}
 	
 	@Override

@@ -22,21 +22,29 @@ public class ConvolutionalNet {
 		this.layers = layers;
 		this.activationFunc = function;
 	}
+	
+	private ConvolutionalNet(List<FeatureLayer> layers, NeuralNet nn, ActivationFunction activationFunction) {
+		this.layers = layers;
+		this.nn = nn;
+		this.activationFunc = activationFunction;
+	}
 
 	public void setNN(NeuralNet nn) {
 		this.nn = nn;
 	}
 
 	public Vector calcOutput(List<Matrix> data) {
-		Vector ln = learnFeatures(data);
-		System.out.println(ln.size());
+		List<Matrix> dataCopy = new ArrayList<>(data.size());
+		data.forEach(d -> dataCopy.add(d.copy()));
+		Vector ln = learnFeatures(dataCopy);
+		//System.out.println(ln.size());
 		ln = nn.calcOutput(ln);
 		return ln;
 	}
 
 	private Vector learnFeatures(List<Matrix> data) {
 		for (FeatureLayer layer : layers) {
-			System.out.println("Data size: " + (data.size() * data.get(0).getNumCols() * data.get(1).getNumRows()));
+			//System.out.println("Data size: " + (data.size() * data.get(0).getNumCols() * data.get(1).getNumRows()));
 			layer.applyLayer(data, activationFunc);
 		}
 		return transformMatricesToVector(data);
@@ -58,6 +66,16 @@ public class ConvolutionalNet {
 
 	public List<FeatureLayer> getLayers() {
 		return layers;
+	}
+	
+	public NeuralNet getNN() {
+		return this.nn;
+	}
+	
+	public ConvolutionalNet copy() {
+		List<FeatureLayer> layersCopy = new ArrayList<>(layers.size());
+		layers.forEach(layer -> layersCopy.add(layer.copy()));
+		return new ConvolutionalNet(layersCopy, nn.copy(), activationFunc);
 	}
 
 	public static class Builder {
@@ -127,7 +145,7 @@ public class ConvolutionalNet {
 			ConvolutionalNet cnn = new ConvolutionalNet(layers, actFunc);
 			cnn.getLayers().forEach(layer -> layer.getCon().generateRandomizedFilters(randFilter, randFilterBias));
 			int nnInputSize = cnn.learnFeatures(createDummyData()).size();
-			
+			System.out.println("NeuralNet Input Size is :" +  nnInputSize);
 			NeuralNet.Builder nnBuilder = new NeuralNet.Builder(nnInputSize, outputs);
 			for (double hiddenLayer : nnHiddenLayers) 
 				nnBuilder.addLayer((int) (hiddenLayer * nnInputSize));

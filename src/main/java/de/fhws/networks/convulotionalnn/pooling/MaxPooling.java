@@ -23,4 +23,11 @@ public class MaxPooling extends Pooling {
 		return new Matrix(matrix);
 	}
 
+	@Override
+	public MaxPooling copy() {
+		return new MaxPooling(size);
+	}
+	
+	
+
 }

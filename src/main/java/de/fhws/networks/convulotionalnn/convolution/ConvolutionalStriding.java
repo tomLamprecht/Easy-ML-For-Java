@@ -16,6 +16,11 @@ public class ConvolutionalStriding extends Convolution{
 		this.striding = striding;
 	}
 	
+	private ConvolutionalStriding(List<Filter> filter, int filterSize, int filterAmount, int striding) {
+		super(filter, filterSize, filterAmount);
+		this.striding = striding;
+	}
+	
 	@Override
 	public List<Matrix> convolute(Matrix level) {
 	
@@ -34,6 +39,13 @@ public class ConvolutionalStriding extends Convolution{
 		}
 	
 		return result;
+	}
+
+	@Override
+	public ConvolutionalStriding copy() {
+		List<Filter> filterCopies = new ArrayList<>(filter.size());
+		filter.forEach(f -> filterCopies.add(f.copy()));
+		return new ConvolutionalStriding(filterCopies, this.filterSize, this.filterAmount, this.striding);
 	}
 
 }

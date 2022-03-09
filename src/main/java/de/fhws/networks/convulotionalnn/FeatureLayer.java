@@ -65,4 +65,8 @@ public class FeatureLayer {
 		this.pool = pool;
 	}
 
+	public FeatureLayer copy() {
+		return new FeatureLayer(con.copy(), pool.copy());
+	}
+	
 }

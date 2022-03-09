@@ -15,7 +15,8 @@ public abstract class Pooling {
 	public void setSize(int size) {
 		this.size = size;
 	}
-
+	
+	public abstract Pooling copy();
 	
 	
 }

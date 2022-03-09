@@ -20,8 +20,15 @@ public abstract class Convolution {
 		this.filterSize = filterSize;
 		this.filter = new ArrayList<>();
 		this.filterAmount = filterAmount;
-
 	}
+	
+	protected Convolution(List<Filter> filter, int filterSize, int filterAmount) {
+		this.filter = filter;
+		this.filterSize = filterSize;
+		this.filterAmount = filterAmount;
+	}
+
+	
 	
 	public void generateRandomizedFilters(Randomizer randFilter, Randomizer randFilterBias) {
 		for (int i = 0; i < filterAmount; i++) {
@@ -44,5 +51,7 @@ public abstract class Convolution {
 		}
 		return result - m2.getBias();
 	}
+	
+	public abstract Convolution copy();
 	
 }

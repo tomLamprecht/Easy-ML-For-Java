@@ -17,4 +17,9 @@ public class NonPooling extends Pooling{
 		return level;
 	}
 
+	@Override
+	public NonPooling copy() {
+		return new NonPooling();
+	}
+
 }

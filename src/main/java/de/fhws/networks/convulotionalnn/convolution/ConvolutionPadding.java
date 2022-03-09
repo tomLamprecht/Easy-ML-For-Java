@@ -13,8 +13,11 @@ public class ConvolutionPadding extends Convolution {
 		super(filterSize, filterAmount);
 	}
 
+	private ConvolutionPadding(List<Filter> filter, int filterSize, int filterAmount) {
+		super(filter, filterSize, filterAmount);
+	}
+	
 	public List<Matrix> convolute(Matrix level) {
-		// Usd for padding
 
 		int puffer = (filterSize - 1);
 		double[][] matrix = new double[level.getNumRows() + puffer * 2][level.getNumCols() + puffer * 2];
@@ -40,6 +43,13 @@ public class ConvolutionPadding extends Convolution {
 		}
 
 		return result;
+	}
+	
+	@Override
+	public ConvolutionPadding copy() {
+		List<Filter> filterCopies = new ArrayList<>(filter.size());
+		filter.forEach(f -> filterCopies.add(f.copy()));
+		return new ConvolutionPadding(filterCopies, this.filterSize, this.filterAmount);
 	}
 
 }
