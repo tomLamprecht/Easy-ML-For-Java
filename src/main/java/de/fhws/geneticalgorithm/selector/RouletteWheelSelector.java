@@ -29,7 +29,7 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
 
         int goalSize = super.calcGoalSize(pop.getSize());
         List<Individual<T>> newIndividuals = new ArrayList<>(goalSize);
-        while (pop.getSize() < goalSize) {
+        while (newIndividuals.size() < goalSize) {
             double bin = Math.random();
             int index = Collections.binarySearch(propbabilityList, bin);
             newIndividuals.add(pop.getIndividuals().get(index >= 0 ? index : -index - 1));
