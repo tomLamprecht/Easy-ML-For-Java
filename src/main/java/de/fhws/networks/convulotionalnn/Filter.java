@@ -1,9 +1,11 @@
 package de.fhws.networks.convulotionalnn;
 
+import java.io.Serializable;
+
 import de.fhws.linearalgebra.Matrix;
 import de.fhws.linearalgebra.Randomizer;
 
-public class Filter {
+public class Filter implements Serializable {
 
 	private Matrix filter;
 	private double bias;

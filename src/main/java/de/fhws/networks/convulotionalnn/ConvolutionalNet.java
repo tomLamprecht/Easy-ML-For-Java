@@ -1,5 +1,6 @@
 package de.fhws.networks.convulotionalnn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import de.fhws.networks.convulotionalnn.pooling.NonPooling;
 import de.fhws.networks.convulotionalnn.pooling.Pooling;
 import de.fhws.networks.neuralnetworks.NeuralNet;
 
-public class ConvolutionalNet {
+public class ConvolutionalNet implements Serializable{
 
 	private final List<FeatureLayer> layers;
 	private NeuralNet nn;

@@ -1,12 +1,13 @@
 package de.fhws.networktrainer;
 
+import java.io.Serializable;
 import java.util.List;
 
 import de.fhws.linearalgebra.Matrix;
 import de.fhws.linearalgebra.Vector;
 import de.fhws.networks.convulotionalnn.ConvolutionalNet;
 
-public class ConvolutionalNNIndividual implements NetworkIndividual<List<Matrix>, ConvolutionalNNIndividual> {
+public class ConvolutionalNNIndividual implements NetworkIndividual<List<Matrix>, ConvolutionalNNIndividual>, Serializable {
 
 	private ConvolutionalNet cnn;
     private CNNFitnessFunction fitnessFunction;

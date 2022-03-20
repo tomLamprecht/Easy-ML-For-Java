@@ -1,8 +1,10 @@
 package de.fhws.networks.convulotionalnn.pooling;
 
+import java.io.Serializable;
+
 import de.fhws.linearalgebra.Matrix;
 
-public abstract class Pooling {
+public abstract class Pooling implements Serializable {
 
 	protected int size;
 	

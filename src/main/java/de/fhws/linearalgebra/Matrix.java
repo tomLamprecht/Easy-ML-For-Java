@@ -1,9 +1,10 @@
 package de.fhws.linearalgebra;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 
-public class Matrix {
+public class Matrix implements Serializable {
 
     private double[][] data;
 

@@ -1,5 +1,6 @@
 package de.fhws.networks.convulotionalnn.convolution;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import de.fhws.linearalgebra.Matrix;
 import de.fhws.linearalgebra.Randomizer;
 import de.fhws.networks.convulotionalnn.Filter;
 
-public abstract class Convolution {
+public abstract class Convolution implements Serializable {
 
 	
 	protected List<Filter> filter;

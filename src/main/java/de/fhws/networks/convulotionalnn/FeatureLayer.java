@@ -1,5 +1,6 @@
 package de.fhws.networks.convulotionalnn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleUnaryOperator;
@@ -8,7 +9,7 @@ import de.fhws.linearalgebra.Matrix;
 import de.fhws.networks.convulotionalnn.convolution.Convolution;
 import de.fhws.networks.convulotionalnn.pooling.Pooling;
 
-public class FeatureLayer {
+public class FeatureLayer implements Serializable {
 
 	private Convolution con;
 	private Pooling pool;

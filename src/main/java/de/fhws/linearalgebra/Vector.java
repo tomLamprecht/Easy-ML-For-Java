@@ -1,10 +1,11 @@
 package de.fhws.linearalgebra;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-public class Vector {
+public class Vector implements Serializable{
     private double[] data;
 
 
