@@ -9,8 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.IntConsumer;
 
-public class GeneticAlgorithm<T extends Individual<T>> {
-	
+public class GeneticAlgorithm<T extends Individual<T>>
+{
+
 	private int size;
 	private final int maxGens;
 	private final Population<T> population;
@@ -24,7 +25,10 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
 	private Optional<ExecutorService> executor = Optional.empty();
 
-	private GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens,  Selector<T> selector, Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger, int amountThreads) {
+	private GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector,
+		Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger,
+		int amountThreads)
+	{
 		this.population = popSupplier.get();
 		this.maxGens = maxGens + population.getGeneration();
 		this.size = population.getSize();
@@ -35,44 +39,98 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 		this.saver = Optional.ofNullable(saver);
 		this.logger = Optional.ofNullable(logger);
 
-		if(amountThreads > 1)
+		if (amountThreads > 1)
 			executor = Optional.of(Executors.newFixedThreadPool(amountThreads));
 
 	}
 
-	public T solve() {
-		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
-		population.calcFitnesses(executor);
-		logger.ifPresent(logger -> logger.log(maxGens, population));
+	public T solve()
+	{
 
-		for(int i = population.getGeneration(); i < maxGens; i++) {
+		for (int i = population.getGeneration(); i < maxGens; i++)
+		{
 			nextGen();
-			population.calcFitnesses(executor);
-			saver.ifPresent(saver -> saver.save(population));
-			logger.ifPresent(logger -> logger.log(maxGens , population));
 		}
 
 		return population.getBest();
 	}
-	
 
+	private void nextGen()
+	{
+		prepareNextEvolution();
 
-	private void nextGen() {
-		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
-		selector.select(population);
-		recombiner.ifPresent(r -> r.recombine(population, size));
-		size = population.getSize();
-		mutator.ifPresent(m -> m.mutate(population));
+		evoluteNextGen();
+
+		doEvolutionFollowUp();
+	}
+
+	private void prepareNextEvolution()
+	{
+		callGenPreperator();
+
+		calculateFitnesses();
+
 		population.incGeneration();
 	}
-	
-	
-	
-	
-	
-	
-	public static class Builder<T extends Individual<T>> {
 
+	private void doEvolutionFollowUp()
+	{
+		population.incGeneration();
+
+		callSaver();
+
+		callLogger();
+	}
+
+	private void callLogger()
+	{
+		logger.ifPresent(logger -> logger.log(maxGens, population));
+	}
+
+	private void callSaver()
+	{
+		saver.ifPresent(saver -> saver.save(population));
+	}
+
+	private void evoluteNextGen()
+	{
+		doSelection();
+
+		doRecombination();
+
+		doMutation();
+	}
+
+	private void calculateFitnesses()
+	{
+		population.calcFitnesses(executor);
+	}
+
+	private void doMutation()
+	{
+		mutator.ifPresent(m -> m.mutate(population));
+	}
+
+	private void doRecombination()
+	{
+		recombiner.ifPresent(r -> r.recombine(population, size));
+		size = population.getSize();
+	}
+
+	private void doSelection()
+	{
+		selector.select(population);
+	}
+
+	private void callGenPreperator()
+	{
+		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
+	}
+
+
+
+	public static class Builder<T extends Individual<T>>
+	{
 
 		private int maxGens;
 		private PopulationSupplier<T> popSupplier;
@@ -86,55 +144,63 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
 		private int amountThreads;
 
-		public Builder (PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector) {
+		public Builder(PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector)
+		{
 			this.selector = selector;
 			this.maxGens = maxGens;
 			this.popSupplier = popSupplier;
 		}
 
-		public Builder<T> withRecombiner(Recombiner<T> recombiner) {
+		public Builder<T> withRecombiner(Recombiner<T> recombiner)
+		{
 			this.recombiner = recombiner;
 			return this;
 		}
 
-		public Builder<T> withMutator(Mutator<T> mutator) {
+		public Builder<T> withMutator(Mutator<T> mutator)
+		{
 			this.mutator = mutator;
 			return this;
 		}
 
-		public Builder<T> withGenPreperator(IntConsumer genPreperator) {
+		public Builder<T> withGenPreperator(IntConsumer genPreperator)
+		{
 			this.genPreperator = genPreperator;
 			return this;
 		}
-		
+
 		/**
-		* used to save populations to file
-		*
-		* @param dir is a directory where the population will be saved in
-		* @param interval is the interval of which the populations should be saved
-		* @param override determines whether a new file should be created each time or the old one overridden
-		* 
-		* @return Builder for the Builder pattern
-		**/
-		public Builder<T> withSaveToFile(File dir, int interval, boolean override){
+		 * used to save populations to file
+		 *
+		 * @param dir      is a directory where the population will be saved in
+		 * @param interval is the interval of which the populations should be saved
+		 * @param override determines whether a new file should be created each time or the old one overridden
+		 * @return Builder for the Builder pattern
+		 **/
+		public Builder<T> withSaveToFile(File dir, int interval, boolean override)
+		{
 			this.saver = new IntervalSaver(interval, override, dir);
 			return this;
 		}
-		
-		public Builder<T> withLogger(Logger logger){
+
+		public Builder<T> withLogger(Logger logger)
+		{
 			this.logger = logger;
 			return this;
 		}
 
-		public Builder<T> withMutliThreaded(int amountThreads) {
-			if(amountThreads < 1)
+		public Builder<T> withMutliThreaded(int amountThreads)
+		{
+			if (amountThreads < 1)
 				throw new IllegalArgumentException("amount of threads must be in at least 1");
 			this.amountThreads = amountThreads;
 			return this;
 		}
 
-		public GeneticAlgorithm<T> build(){
-			return new GeneticAlgorithm<T>(popSupplier, maxGens, selector, recombiner, mutator, genPreperator, saver, logger, amountThreads);
+		public GeneticAlgorithm<T> build()
+		{
+			return new GeneticAlgorithm<T>(popSupplier, maxGens, selector, recombiner, mutator, genPreperator, saver,
+				logger, amountThreads);
 		}
 	}
 
