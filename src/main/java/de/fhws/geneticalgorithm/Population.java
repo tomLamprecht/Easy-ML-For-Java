@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public final class Population <T extends Individual<T>> implements Serializable {
 	private List<T> individuals;
@@ -66,7 +67,8 @@ public final class Population <T extends Individual<T>> implements Serializable 
 
 	public void replaceAllIndividuals(Collection<Individual<T>> collection) {
 		individuals.clear();
-		collection.forEach(ind -> individuals.add(ind.copy()));
+	//	collection.forEach(ind -> individuals.add(ind.copy()));
+		individuals.addAll(collection.stream().map( ind -> ind.copy()).collect(Collectors.toList()));
 	}
 
 	public List<T> getIndividuals() {
