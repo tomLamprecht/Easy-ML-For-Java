@@ -75,8 +75,6 @@ public class GeneticAlgorithm<T extends Individual<T>>
 
 	private void doEvolutionFollowUp()
 	{
-		population.incGeneration();
-
 		callSaver();
 
 		callLogger();
