@@ -46,7 +46,7 @@ public class FeatureLayer implements Serializable {
 
 	private void activate(List<Matrix> data, DoubleUnaryOperator function) {
 		for (Matrix level : data) {
-			level.applyActivation(function);
+			level.apply(function);
 		}
 	}
 	

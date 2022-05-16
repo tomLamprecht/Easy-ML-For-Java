@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
+import java.util.stream.DoubleStream;
 
 public class Vector implements Serializable{
     private double[] data;
@@ -106,6 +107,7 @@ public class Vector implements Serializable{
     {
         return data;
     }
+
 
     /**
      * gets data at index
