@@ -137,16 +137,16 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     }
 
     private void doMutation() {
-        mutator.ifPresent(m -> m.mutate(population));
+        mutator.ifPresent(m -> m.mutate(population, executor));
     }
 
     private void doRecombination() {
-        recombiner.ifPresent(r -> r.recombine(population, size));
+        recombiner.ifPresent(r -> r.recombine(population, size, executor));
         size = population.getSize();
     }
 
     private void doSelection() {
-        selector.select(population);
+        selector.select(population, executor);
     }
 
     private void callGenPreperator() {

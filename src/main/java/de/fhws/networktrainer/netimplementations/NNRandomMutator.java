@@ -6,6 +6,8 @@ import de.fhws.networktrainer.NetworkMutator;
 import de.fhws.networktrainer.NeuralNetIndividual;
 import de.fhws.utility.Validator;
 
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.function.DoubleUnaryOperator;
 
 public class NNRandomMutator implements NetworkMutator<NeuralNetIndividual> {
@@ -26,7 +28,7 @@ public class NNRandomMutator implements NetworkMutator<NeuralNetIndividual> {
     }
 
     @Override
-    public void mutate(Population<NeuralNetIndividual> pop) {
+    public void mutate(Population<NeuralNetIndividual> pop, Optional<ExecutorService> executorService) {
         pop.getIndividuals()
                 .stream()
                 .filter(individual -> Math.random() < outerMutationRate)

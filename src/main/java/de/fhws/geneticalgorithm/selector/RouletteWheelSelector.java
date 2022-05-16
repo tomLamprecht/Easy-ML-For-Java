@@ -4,6 +4,7 @@ import de.fhws.geneticalgorithm.Population;
 import de.fhws.geneticalgorithm.Individual;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSelector<T> {
 
@@ -15,7 +16,7 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
     }
 
     @Override
-    public void select(Population<T> pop) {
+    public void select(Population<T> pop, Optional<ExecutorService> executorService) {
         double totalFitness = calcTotalFitness(pop);
 
         List<Double> probabilityList = calcProbabilityList(pop, totalFitness);

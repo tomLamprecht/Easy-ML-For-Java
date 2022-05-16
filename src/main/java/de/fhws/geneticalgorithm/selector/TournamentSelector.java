@@ -3,10 +3,8 @@ package de.fhws.geneticalgorithm.selector;
 import de.fhws.geneticalgorithm.Population;
 import de.fhws.geneticalgorithm.Individual;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 public class TournamentSelector<T extends Individual<T>> extends PercentageSelector<T> {
     private final int tournamentSize;
@@ -20,7 +18,7 @@ public class TournamentSelector<T extends Individual<T>> extends PercentageSelec
     }
 
     @Override
-    public void select(Population<T> pop) {
+    public void select(Population<T> pop, Optional<ExecutorService> executorService) {
         int goalSize = super.calcGoalSize(pop.getSize());
 
         if(tournamentSize > pop.getSize())

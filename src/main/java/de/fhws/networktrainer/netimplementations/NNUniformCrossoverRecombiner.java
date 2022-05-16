@@ -8,8 +8,9 @@ import de.fhws.utility.ListUtility;
 import de.fhws.utility.Validator;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-
+import java.util.concurrent.ExecutorService;
 
 public class NNUniformCrossoverRecombiner implements NetworkRecombiner<NeuralNetIndividual> {
 
@@ -20,7 +21,7 @@ public class NNUniformCrossoverRecombiner implements NetworkRecombiner<NeuralNet
     }
 
     @Override
-    public void recombine(Population<NeuralNetIndividual> pop, int goalSize) {
+    public void recombine(Population<NeuralNetIndividual> pop, int goalSize, Optional<ExecutorService> executorService) {
         Validator.validateBetweenAndThrow(amountOfParentsPerChild, 1, pop.getSize());
 
         while (pop.getIndividuals().size() < goalSize) {
