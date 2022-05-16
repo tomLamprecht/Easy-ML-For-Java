@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.IntConsumer;
 
 public class GeneticAlgorithm<T extends Individual<T>> {
@@ -23,6 +24,8 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     private final Optional<Logger> logger;
 
     private Optional<ExecutorService> executor = Optional.empty();
+
+    private final AtomicBoolean shutdowned = new AtomicBoolean(false);
 
     private GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector,
                              Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger,
@@ -42,12 +45,38 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
     }
 
+    /**
+     * Solves the given problem with an evolutional approach.
+     *
+     * @return T the developed solution for the problem.
+     * @throws IllegalStateException if GeneticAlgorithm is already shutdowned
+     */
     public T solve() {
-        for (int i = population.getGeneration(); i < maxGens; i++) {
-            nextGen();
-        }
+        validateShutdownState();
+
+        evolute();
+
+        shutdownGeneticAlgorithm();
 
         return getBestIndividual();
+    }
+
+    private void evolute()
+    {
+        for (int i = population.getGeneration(); i < maxGens; i++)
+            nextGen();
+    }
+
+    private void validateShutdownState()
+    {
+        if(isShutdowned())
+            throw new IllegalStateException("Genetic Algorithm already shutdowned");
+    }
+
+    private void shutdownGeneticAlgorithm()
+    {
+        shutdowned.set(true);
+        executor.ifPresent(exec -> exec.shutdown());
     }
 
     private T getBestIndividual() {
@@ -112,6 +141,11 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
     private void callGenPreperator() {
         genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
+    }
+
+    public boolean isShutdowned()
+    {
+        return shutdowned.get();
     }
 
     public static class Builder<T extends Individual<T>> {
