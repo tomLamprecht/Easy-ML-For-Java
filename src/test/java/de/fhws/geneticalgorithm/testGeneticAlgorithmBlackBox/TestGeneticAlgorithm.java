@@ -50,7 +50,7 @@ public class TestGeneticAlgorithm
 
 	@Test
 	public void testGeneticAlgorithmShutdownException() {
-		GeneticAlgorithm<TSP> ga = createTestTSPGeneticAlgorithm((pop) -> {}, false);
+		GeneticAlgorithm<TSP> ga = createTestTSPGeneticAlgorithm((pop, executor) -> {}, false);
 		ga.solve();
 		doSolveAfterShutdownOfGeneticAlgorithm(ga);
 	}
@@ -132,14 +132,14 @@ public class TestGeneticAlgorithm
 
 	private static Mutator<TSP> createTspMutator()
 	{
-		return pop -> pop.getIndividuals().forEach(indi -> {
+		return (pop, executorService) -> pop.getIndividuals().forEach(indi -> {
 			if (Math.random() < TSP_MUTATION_RATE && pop.getBest() != indi)
 				indi.mutate();
 		});
 	}
 
 	private static Recombiner<TSP> createTspRecombiner() {
-		return (pop, size) -> {
+		return (pop, size, executorService) -> {
 			int i = 0;
 			int initialSize = pop.getSize();
 			while(pop.getSize() < size){
