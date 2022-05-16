@@ -2,7 +2,7 @@ package de.fhws.geneticalgorithm;
 
 import java.io.File;
 
-import de.fhws.filehandler.FileHandler;
+import de.fhws.utility.FileHandler;
 
 class IntervalSaver {
 

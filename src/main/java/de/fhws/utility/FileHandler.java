@@ -1,4 +1,4 @@
-package de.fhws.filehandler;
+package de.fhws.utility;
 
 import java.io.BufferedWriter;
 import java.io.File;
