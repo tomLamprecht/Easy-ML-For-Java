@@ -61,7 +61,7 @@ public class TestGeneticAlgorithm
 			ga.solve();
 			fail();
 		}catch(IllegalStateException e) {
-			assertEquals("Genetic Algorithm already shutdowned", e.getMessage());
+			assertEquals(GeneticAlgorithm.ILLEGAL_OPERATION_AFTER_SHUTDOWN_MESSAGE, e.getMessage());
 		}
 	}
 
