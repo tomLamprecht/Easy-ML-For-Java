@@ -1,11 +1,10 @@
 package de.fhws.geneticalgorithm;
 
-import de.fhws.utility.ThrowingConsumer;
+import de.fhws.utility.MultiThreadHelper;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public final class Population<T extends Individual<T>> implements Serializable
@@ -26,11 +25,7 @@ public final class Population<T extends Individual<T>> implements Serializable
 
 	void calcFitnesses(Optional<ExecutorService> executor)
 	{
-		executor.ifPresentOrElse(exec ->
-				individuals.stream()
-					.map(individual -> exec.submit(individual::calcFitness))
-					.forEach(ThrowingConsumer.unchecked(Future::get))
-
+		executor.ifPresentOrElse(exec -> MultiThreadHelper.callConsumerOnCollection(exec, individuals, T::calcFitness)
 			, () -> individuals.forEach(Individual::calcFitness));
 	}
 

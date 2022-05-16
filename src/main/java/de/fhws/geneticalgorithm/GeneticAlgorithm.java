@@ -211,7 +211,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
             return this;
         }
 
-        public Builder<T> withMutliThreaded(int amountThreads) {
+        public Builder<T> withMultiThreaded(int amountThreads) {
             if (amountThreads < 1)
                 throw new IllegalArgumentException("amount of threads must be in at least 1");
             this.amountThreads = amountThreads;

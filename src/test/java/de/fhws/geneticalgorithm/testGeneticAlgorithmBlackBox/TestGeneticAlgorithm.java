@@ -11,7 +11,8 @@ import org.junit.Test;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestGeneticAlgorithm
 {
@@ -106,7 +107,7 @@ public class TestGeneticAlgorithm
 		return  new GeneticAlgorithm.Builder<TSP>(popSup, MAX_GENS, selector)
 			.withRecombiner(tspRecombiner)
 			.withMutator(tspMutator)
-			.withMutliThreaded( withMultiThreading ? Runtime.getRuntime().availableProcessors() : 1 )
+			.withMultiThreaded( withMultiThreading ? Runtime.getRuntime().availableProcessors() : 1 )
 			.build();
 	}
 
