@@ -69,6 +69,10 @@ public final class Population<T extends Individual<T>> implements Serializable
 		return individuals.size();
 	}
 
+	/**
+	 * Replaces all Individuals with a copy of the Individuals in the given collection
+	 * @param collection of Individuals which will be copied
+	 */
 	public void replaceAllIndividuals(Collection<Individual<T>> collection)
 	{
 		individuals.clear();
