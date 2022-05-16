@@ -56,9 +56,16 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
         evolute();
 
+        return getBestAndShutdown();
+    }
+
+    private T getBestAndShutdown()
+    {
+        T best = getBestIndividual();
+
         shutdownGeneticAlgorithm();
 
-        return getBestIndividual();
+        return best;
     }
 
     private void evolute()
