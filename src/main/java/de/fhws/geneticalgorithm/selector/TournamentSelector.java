@@ -27,13 +27,8 @@ public class TournamentSelector<T extends Individual<T>> extends PercentageSelec
             throw new RuntimeException("the population size is to small for the tournament size");
 
         if(pop.getSize() != goalSize) {
-            List<Individual<T>> newIndividuals = new ArrayList<>(goalSize);
-            while (newIndividuals.size() < goalSize) {
-                Individual<T> newOne = playTournament(pop);
-                newIndividuals.add(newOne);
-            }
-
-            pop.replaceAllIndividuals(newIndividuals);
+            List<Individual<T>> repopulated = repopulate(pop, goalSize);
+            pop.replaceAllIndividuals(repopulated);
         }
 
     }
@@ -52,6 +47,16 @@ public class TournamentSelector<T extends Individual<T>> extends PercentageSelec
         }
 
         return Collections.max(participants);
+    }
+
+    private List<Individual<T>> repopulate(Population<T> pop, int goalSize) {
+        List<Individual<T>> repopulated = new ArrayList<>(goalSize);
+
+        while (repopulated.size() < goalSize) {
+            Individual<T> newOne = playTournament(pop);
+            repopulated.add(newOne);
+        }
+        return repopulated;
     }
 
 }
