@@ -46,12 +46,16 @@ public class GeneticAlgorithm<T extends Individual<T>>
 
 	public T solve()
 	{
-
-		for (int i = population.getGeneration(); i < maxGens; i++)
-		{
+		for (int i = population.getGeneration(); i < maxGens; i++) {
 			nextGen();
 		}
 
+		return getBestIndividual();
+	}
+
+	private T getBestIndividual()
+	{
+		calculateFitnesses();
 		return population.getBest();
 	}
 
@@ -124,8 +128,6 @@ public class GeneticAlgorithm<T extends Individual<T>>
 	{
 		genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
 	}
-
-
 
 	public static class Builder<T extends Individual<T>>
 	{
