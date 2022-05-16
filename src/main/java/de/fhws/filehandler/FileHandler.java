@@ -259,7 +259,7 @@ public final class FileHandler {
 		int index = fname.lastIndexOf(".");
 		if (index == -1)
 			return new String[] { fname, null };
-		return new String[] { fname.substring(0, index), fname.substring(index, fname.length()) };
+		return new String[] { fname.substring(0, index), fname.substring(index) };
 	}
 
 }
