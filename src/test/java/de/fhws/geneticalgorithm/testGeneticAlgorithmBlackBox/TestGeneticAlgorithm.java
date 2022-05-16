@@ -1,35 +1,117 @@
 package de.fhws.geneticalgorithm.testGeneticAlgorithmBlackBox;
 
 import de.fhws.geneticalgorithm.*;
-import de.fhws.geneticalgorithm.logger.ConsoleLogger;
 import de.fhws.geneticalgorithm.selector.EliteSelector;
 import de.fhws.geneticalgorithm.selector.RouletteWheelSelector;
 import de.fhws.geneticalgorithm.selector.Selector;
 import de.fhws.geneticalgorithm.selector.TournamentSelector;
-import org.junit.Assert;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class TestGeneticAlgorithm
 {
-	@Test
-	public void testSeveralTimes() {
-		for (int i = 0; i < 10000; i++)
-		{
-			testGeneticAlgorithmWithBlackBox();
-		}
+	private static final int TEST_RUNS = 100;
+	private static final int EXPECTED_RESULT = 14;
 
+	private static final double TSP_MUTATION_RATE = 0.95;
+	private static final int POPULATION_SIZE = 64;
+	private static final int MAX_GENS = 20;
+	private static final double SELECTION_PERCENTAGE = 0.2;
+	private static final int TOURNAMENT_SIZE = 12;
+
+	private static final Graph graph = createTestGraph();
+	private static final PopulationSupplier<TSP> popSup = createTspPopulationSupplier();
+	private static final Mutator<TSP> tspMutator = createTspMutator();
+	private static final Recombiner<TSP> tspRecombiner = createTspRecombiner();
+
+
+	@Test
+	public void testGAWithRouletteWheelSelectorMultipleTimes(){
+		testSeveralTimes(this::testGeneticAlgorithmWithRouletteWheelSelector);
+		testSeveralTimes(this::testGeneticAlgorithmWithRouletteWheelSelectorMultiThreaded);
 	}
 
-	public void testGeneticAlgorithmWithBlackBox(){
+	@Test
+	public void testGAWithEliteSelectorMultipleTimes(){
+		testSeveralTimes(this::testGeneticAlgorithmWithEliteSelector);
+		testSeveralTimes(this::testGeneticAlgorithmWithEliteSelectorMultiThreaded);
+	}
 
-		int[][] adjazenz = new int[][]
+	@Test
+	public void testGAWithTournamentSelectorMultipleTimes(){
+		testSeveralTimes(this::testGeneticAlgorithmWithTournamentSelector);
+		testSeveralTimes(this::testGeneticAlgorithmWithTournamentSelectorMultiThreaded);
+	}
+
+	@Test
+	public void testGeneticAlgorithmShutdownException() {
+		GeneticAlgorithm<TSP> ga = createTestTSPGeneticAlgorithm((pop) -> {}, false);
+		ga.solve();
+		doSolveAfterShutdownOfGeneticAlgorithm(ga);
+	}
+
+	private void doSolveAfterShutdownOfGeneticAlgorithm(GeneticAlgorithm<TSP> ga)
+	{
+		try{
+			ga.solve();
+			fail();
+		}catch(IllegalStateException e) {
+			assertEquals("Genetic Algorithm already shutdowned", e.getMessage());
+		}
+	}
+
+	public void testSeveralTimes(GeneticAlgorithmTester tester) {
+		for (int i = 0; i < TEST_RUNS; i++)
+			tester.test();
+	}
+
+	private void testGeneticAlgorithmWithRouletteWheelSelector(){
+		createGeneticAlgorithmAndRun(new RouletteWheelSelector<>(SELECTION_PERCENTAGE, true), false);
+	}
+
+	private void testGeneticAlgorithmWithRouletteWheelSelectorMultiThreaded(){
+		createGeneticAlgorithmAndRun(new RouletteWheelSelector<>(SELECTION_PERCENTAGE, true), true);
+	}
+
+	private void testGeneticAlgorithmWithEliteSelector(){
+		createGeneticAlgorithmAndRun(new EliteSelector<>(SELECTION_PERCENTAGE), false);
+	}
+
+	private void testGeneticAlgorithmWithEliteSelectorMultiThreaded(){
+		createGeneticAlgorithmAndRun(new EliteSelector<>(SELECTION_PERCENTAGE), true);
+	}
+
+	private void testGeneticAlgorithmWithTournamentSelector(){
+		createGeneticAlgorithmAndRun(new TournamentSelector<>(SELECTION_PERCENTAGE, TOURNAMENT_SIZE), false);
+	}
+
+	private void testGeneticAlgorithmWithTournamentSelectorMultiThreaded(){
+		createGeneticAlgorithmAndRun(new TournamentSelector<>(SELECTION_PERCENTAGE, TOURNAMENT_SIZE), true);
+	}
+
+	private void createGeneticAlgorithmAndRun(Selector<TSP> selector, boolean withMultiThreading)
+	{
+		GeneticAlgorithm<TSP> ga = createTestTSPGeneticAlgorithm(selector, withMultiThreading);
+
+		TSP result = ga.solve();
+		assertEquals(EXPECTED_RESULT, result.getDist());
+	}
+
+	private static GeneticAlgorithm<TSP> createTestTSPGeneticAlgorithm(Selector<TSP> selector, boolean withMultiThreading){
+		return  new GeneticAlgorithm.Builder<TSP>(popSup, MAX_GENS, selector)
+			.withRecombiner(tspRecombiner)
+			.withMutator(tspMutator)
+			.withMutliThreaded( withMultiThreading ? Runtime.getRuntime().availableProcessors() : 1 )
+			.build();
+	}
+
+	@NotNull private static Graph createTestGraph() {
+		final int[][] adjazenz = new int[][]
 			{
 				{0 ,10 ,3 ,5 ,9 ,8},
 				{1 ,0 ,7 ,2 ,8 ,6},
@@ -39,12 +121,25 @@ public class TestGeneticAlgorithm
 				{5, 3, 7, 4, 1, 0}
 			};
 
-		Graph graph = new Graph(adjazenz);
+		return new Graph(adjazenz);
+	}
 
-		PopulationSupplier<TSP> popSup = () -> new Population<>(IntStream.range(0, 64).mapToObj( i -> TSP.genRandomSolution(graph)).collect(Collectors.toList()));
-		Mutator<TSP> tspMutator = pop -> pop.getIndividuals().forEach(indi -> { if(Math.random() < 0.95 && pop.getBest() != indi ) indi.mutate(); });
+	@NotNull private static PopulationSupplier<TSP> createTspPopulationSupplier()
+	{
+		return () -> new Population<>(IntStream.range(0, POPULATION_SIZE).mapToObj(i -> TSP.genRandomSolution(graph))
+			.collect(Collectors.toList()));
+	}
 
-		Recombiner<TSP> recombiner = (pop, size) -> {
+	private static Mutator<TSP> createTspMutator()
+	{
+		return pop -> pop.getIndividuals().forEach(indi -> {
+			if (Math.random() < TSP_MUTATION_RATE && pop.getBest() != indi)
+				indi.mutate();
+		});
+	}
+
+	private static Recombiner<TSP> createTspRecombiner() {
+		return (pop, size) -> {
 			int i = 0;
 			int initialSize = pop.getSize();
 			while(pop.getSize() < size){
@@ -53,17 +148,7 @@ public class TestGeneticAlgorithm
 				i = i % initialSize;
 			}
 		};
-
-		GeneticAlgorithm<TSP> ga = new GeneticAlgorithm.Builder<TSP>(popSup, 20, new RouletteWheelSelector<>(0.2, true))
-			.withRecombiner(recombiner)
-			.withMutator(tspMutator)
-			.withMutliThreaded(1)
-			//.withLogger(new ConsoleLogger())
-			.build();
-
-
-		TSP result = ga.solve();
-		assertEquals(14, result.getDist());
 	}
+
 
 }
