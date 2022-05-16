@@ -21,10 +21,5 @@ public abstract class MultiThreadHelper
 			.forEach(ThrowingConsumer.unchecked(Future::get));
 	}
 
-	public static <T> void callConsumerOnStream(ExecutorService executorService, Collection<T> collection, Consumer<T> consumer){
-		collection.stream()
-			.map(element -> executorService.submit(() -> consumer.accept(element)))
-			.forEach(ThrowingConsumer.unchecked(Future::get));
-	}
 
 }
