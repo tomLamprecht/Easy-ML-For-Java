@@ -2,6 +2,7 @@ package de.fhws.geneticalgorithm;
 
 import de.fhws.geneticalgorithm.logger.Logger;
 import de.fhws.geneticalgorithm.selector.Selector;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Optional;
@@ -169,7 +170,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
         private int amountThreads;
 
-        public Builder(PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector) {
+        public Builder(@NotNull PopulationSupplier<T> popSupplier, int maxGens, @NotNull Selector<T> selector) {
             this.selector = selector;
             this.maxGens = maxGens;
             this.popSupplier = popSupplier;
