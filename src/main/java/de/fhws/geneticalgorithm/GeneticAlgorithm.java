@@ -13,6 +13,8 @@ import java.util.function.IntConsumer;
 
 public class GeneticAlgorithm<T extends Individual<T>> {
 
+    public static final String ILLEGAL_OPERATION_AFTER_SHUTDOWN_MESSAGE = "Genetic Algorithm already shutdowned";
+
     private int size;
     private final int maxGens;
     private final Population<T> population;
@@ -78,7 +80,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     private void validateShutdownState()
     {
         if(isShutdowned())
-            throw new IllegalStateException("Genetic Algorithm already shutdowned");
+            throw new IllegalStateException(ILLEGAL_OPERATION_AFTER_SHUTDOWN_MESSAGE);
     }
 
     private void shutdownGeneticAlgorithm()
