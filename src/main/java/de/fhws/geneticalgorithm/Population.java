@@ -1,8 +1,9 @@
 package de.fhws.geneticalgorithm;
 
+import de.fhws.utility.ThrowingConsumer;
+
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -25,26 +26,12 @@ public final class Population<T extends Individual<T>> implements Serializable
 
 	void calcFitnesses(Optional<ExecutorService> executor)
 	{
-		executor.ifPresentOrElse(exec -> {
+		executor.ifPresentOrElse(exec ->
+				individuals.stream()
+					.map(individual -> exec.submit(individual::calcFitness))
+					.forEach(ThrowingConsumer.unchecked(Future::get))
 
-			List<Future<?>> futures = new ArrayList<>(individuals.size());
-
-			individuals.forEach(ind -> futures.add(exec.submit(ind::calcFitness)));
-
-			futures.forEach(f -> {
-
-				try
-				{
-					f.get();
-				}
-				catch (InterruptedException | ExecutionException e)
-				{
-					e.printStackTrace();
-				}
-
-			});
-
-		}, () -> individuals.forEach(Individual::calcFitness));
+			, () -> individuals.forEach(Individual::calcFitness));
 	}
 
 	/**
