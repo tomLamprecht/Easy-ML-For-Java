@@ -1,11 +1,11 @@
-package de.fhws.utility;
+package de.fhws.utility.throwingintefaces;
 
 import java.util.function.Consumer;
 
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Exception>
 {
-	public void accept(T t) throws E;
+	void accept(T t) throws E;
 
 	static <T, E extends Exception> Consumer<T> unchecked(ThrowingConsumer<T, E> throwingConsumer){
 		return t -> {
