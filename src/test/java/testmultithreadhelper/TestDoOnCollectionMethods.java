@@ -79,6 +79,17 @@ public class TestDoOnCollectionMethods
 	@Test public void testDoMappingOnCollection()
 	{
 		int size = 10;
+		Function<IntegerWrapper, Integer> unwrap = getUnwrapFunction();
+
+		Measure<Collection<Integer>> measureSingleThreading = doMappingSingleThreaded(size, unwrap);
+
+		Measure<Collection<Integer>> measureMultiThreading = doMappingMultiThreaded(size, unwrap, measureSingleThreading.getValue());
+
+		checkExecutionTimes(measureMultiThreading.getTime(), measureSingleThreading.getTime());
+	}
+
+	private Function<IntegerWrapper, Integer> getUnwrapFunction()
+	{
 		Function<IntegerWrapper, Integer> unwrap = wrapped -> {
 			try
 			{
@@ -90,13 +101,7 @@ public class TestDoOnCollectionMethods
 			}
 			return wrapped.value;
 		};
-
-		Measure<Collection<Integer>> measureSingleThreading = doMappingSingleThreaded(size, unwrap);
-
-		Measure<Collection<Integer>> measureMultiThreading = doMappingMultiThreaded(size, unwrap,
-			measureSingleThreading.getValue());
-
-		checkExecutionTimes(measureMultiThreading.getTime(), measureSingleThreading.getTime());
+		return unwrap;
 	}
 
 	private <T> Measure<Collection<T>> doMappingSingleThreaded(int size, Function<IntegerWrapper, T> mappingFunction)
