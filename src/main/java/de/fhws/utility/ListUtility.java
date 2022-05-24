@@ -2,21 +2,18 @@ package de.fhws.utility;
 
 import de.fhws.networktrainer.NeuralNetIndividual;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ListUtility {
     public static <T> List<T> selectRandomElements(List<T> list, int amount) {
-        List<T> selectedElements = new ArrayList<>(amount);
-        for (int i = 0; i < amount; i++) {
-            int index = new Random().nextInt(list.size());
-            T element = list.get(index);
-            if (!selectedElements.contains(element))
-                selectedElements.add(element);
-            else
-                i--;
-        }
-        return selectedElements;
+        if( amount > list.size())
+            throw new IllegalArgumentException("amount can't be bigger than list size");
+
+       return Stream.generate( () -> list.get( (int) ( Math.random() * list.size() ) ) )
+            .distinct()
+            .limit( amount )
+            .collect( Collectors.toList() );
     }
 }
