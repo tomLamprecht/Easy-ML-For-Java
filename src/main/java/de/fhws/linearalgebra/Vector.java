@@ -2,9 +2,11 @@ package de.fhws.linearalgebra;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 public class Vector implements Serializable{
     private double[] data;
@@ -88,15 +90,13 @@ public class Vector implements Serializable{
     /**
      * finds the index of the biggest number in this vector
      *
-     * @return the index of the biggest number in this vector
+     * @return the index of the biggest number in this vector or -1 if the Vector is empty
      */
     public int getIndexOfBiggest() {
-        int index = 0;
-        for (int i = 1; i < data.length; i++) {
-            if (data[i] > data[index])
-                index = i;
-        }
-        return index;
+        return IntStream.range(0, data.length)
+            .boxed()
+            .max(Comparator.comparingDouble(i -> data[i]))
+            .orElse( -1 );
     }
 
     /**
