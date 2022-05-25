@@ -1,10 +1,7 @@
 package de.fhws.geneticalgorithm.testGeneticAlgorithmBlackBox;
 
 import de.fhws.geneticalgorithm.*;
-import de.fhws.geneticalgorithm.selector.EliteSelector;
-import de.fhws.geneticalgorithm.selector.RouletteWheelSelector;
-import de.fhws.geneticalgorithm.selector.Selector;
-import de.fhws.geneticalgorithm.selector.TournamentSelector;
+import de.fhws.geneticalgorithm.selector.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
