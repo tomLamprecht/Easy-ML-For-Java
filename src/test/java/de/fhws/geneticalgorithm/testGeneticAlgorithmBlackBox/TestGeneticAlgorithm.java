@@ -34,18 +34,30 @@ public class TestGeneticAlgorithm
 	@Test
 	public void testGAWithRouletteWheelSelectorMultipleTimes(){
 		testSeveralTimes(this::testGeneticAlgorithmWithRouletteWheelSelector);
+	}
+
+	@Test
+	public void testGAWithRouletteWheelSelectorMultiThreadedMultipleTimes(){
 		testSeveralTimes(this::testGeneticAlgorithmWithRouletteWheelSelectorMultiThreaded);
 	}
 
 	@Test
 	public void testGAWithEliteSelectorMultipleTimes(){
 		testSeveralTimes(this::testGeneticAlgorithmWithEliteSelector);
+	}
+
+	@Test
+	public void testGAWithEliteSelectorMultiThreadedMultipleTimes(){
 		testSeveralTimes(this::testGeneticAlgorithmWithEliteSelectorMultiThreaded);
 	}
 
 	@Test
 	public void testGAWithTournamentSelectorMultipleTimes(){
 		testSeveralTimes(this::testGeneticAlgorithmWithTournamentSelector);
+	}
+
+	@Test
+	public void testGAWithTournamentSelectorMultiThreadedMultipleTimes(){
 		testSeveralTimes(this::testGeneticAlgorithmWithTournamentSelectorMultiThreaded);
 	}
 
