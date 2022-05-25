@@ -109,4 +109,17 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
         return pop.getIndividuals().get(index >= 0 ? index : -index - 1);
     }
 
+    public static class EnsuredSingleThread<T extends Individual<T>> extends RouletteWheelSelector<T>{
+
+        public EnsuredSingleThread(double percent, boolean ensureAddFirst)
+        {
+            super(percent, ensureAddFirst);
+        }
+
+        @Override public void select(Population<T> pop, Optional<ExecutorService> executorService)
+        {
+            super.select(pop, Optional.empty());
+        }
+    }
+
 }
