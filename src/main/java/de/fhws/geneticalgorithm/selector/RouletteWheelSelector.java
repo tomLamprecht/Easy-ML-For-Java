@@ -80,19 +80,28 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
         ExecutorService executorService, int goalSize, List<Individual<T>> repopulated)
     {
         List<Individual<T>> synchronizedRepopulated = Collections.synchronizedList(repopulated);
+
+        List<Callable<Void>> calls = getCallsForRepopulation(pop, probabilityList, goalSize, repopulated, synchronizedRepopulated);
+
+        ThrowingRunnable.unchecked( () -> executorService.invokeAll(calls) ).run();
+
+        return synchronizedRepopulated;
+    }
+
+    @NotNull private List<Callable<Void>> getCallsForRepopulation(Population<T> pop, List<Double> probabilityList, int goalSize,
+        List<Individual<T>> repopulated, List<Individual<T>> synchronizedRepopulated)
+    {
         List<Callable<Void>> calls = new ArrayList<>();
 
         int initSize = repopulated.size();
 
         for (int i = 0; i < goalSize - initSize; i++) {
             calls.add( MultiThreadHelper.transformToCallableVoid(
-                () -> synchronizedRepopulated.add(getElementByProbabilityList( pop, probabilityList) )
+                () -> synchronizedRepopulated.add(getElementByProbabilityList(pop, probabilityList) )
             ) );
         }
 
-       ThrowingRunnable.unchecked( () -> executorService.invokeAll(calls) ).run();
-
-        return synchronizedRepopulated;
+        return calls;
     }
 
     private Individual<T> getElementByProbabilityList(Population<T> pop, List<Double> probabilityList){
