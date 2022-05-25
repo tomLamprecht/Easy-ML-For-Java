@@ -73,7 +73,7 @@ public class TestDoOnCollectionMethods
 
 		long executionTimeSingleThreading = getConsumerSingleThreadExecutionTime(zeroValueConsumer, size);
 
-		checkExecutionTimes(executionTimeMultiThreading, executionTimeSingleThreading);
+		checkExecutionTimes(executionTimeMultiThreading, executionTimeSingleThreading, new Object(){}.getClass().getEnclosingMethod().getName());
 	}
 
 	@Test public void testDoMappingOnCollection()
@@ -85,7 +85,7 @@ public class TestDoOnCollectionMethods
 
 		Measure<Collection<Integer>> measureMultiThreading = doMappingMultiThreaded(size, unwrap, measureSingleThreading.getValue());
 
-		checkExecutionTimes(measureMultiThreading.getTime(), measureSingleThreading.getTime());
+		checkExecutionTimes(measureMultiThreading.getTime(), measureSingleThreading.getTime(), new Object(){}.getClass().getEnclosingMethod().getName());
 	}
 
 	private Function<IntegerWrapper, Integer> getUnwrapFunction()
@@ -141,11 +141,11 @@ public class TestDoOnCollectionMethods
 		return measureMultiThreading.time;
 	}
 
-	private void checkExecutionTimes(long executionTimeMultiThreading, long executionTimeSingleThreading)
+	private void checkExecutionTimes(long executionTimeMultiThreading, long executionTimeSingleThreading, String methodName)
 	{
 		if (executionTimeSingleThreading < executionTimeMultiThreading)
 			logger.warning(
-				"Multi Threading implementation was slower than single Threading by " + (executionTimeMultiThreading
+				"Multi Threading implementation in " + methodName + " was slower than single Threading by " + (executionTimeMultiThreading
 					- executionTimeSingleThreading) + " milliseconds");
 	}
 
