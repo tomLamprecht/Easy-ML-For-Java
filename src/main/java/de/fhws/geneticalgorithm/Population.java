@@ -54,13 +54,18 @@ public final class Population<T extends Individual<T>> implements Serializable {
     }
 
     /**
-     * Replaces all Individuals with a copy of the Individuals in the given collection
+     * Replaces all Individuals with a copy of the Individuals if the reference of this Individual occurs more than once in the given collection
      *
      * @param collection of Individuals which will be copied
      */
     public void replaceAllIndividuals(Collection<Individual<T>> collection) {
         individuals.clear();
-        individuals.addAll(collection.stream().map(Individual::copy).collect(Collectors.toList()));
+
+        Map<Integer, Long> referenceMap = collection.stream().collect( Collectors.groupingBy( System::identityHashCode, Collectors.counting() ) );
+
+        individuals.addAll( collection.stream()
+                .map( element -> referenceMap.merge( System.identityHashCode( element ), -1L, Long::sum ) > 0 ? element.copy() : element.getThis() )
+                .collect( Collectors.toList() ) );
     }
 
     public List<T> getIndividuals() {

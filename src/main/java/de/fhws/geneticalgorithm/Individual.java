@@ -9,7 +9,20 @@ public interface Individual<T extends Individual<T>> extends Comparable<Individu
      double getFitness();
      
      T copy();
-     
+
+     //This Warning can be suppressed, because the only way this could crash is
+     //when a class is implementing Individual but gives another class as the Generic Type
+    //This is not an expected behavior and the whole program would crash anyway, therefore there is no further need to handle this cast
+    @SuppressWarnings("unchecked")
+     default T getThis(){
+         try {
+             return (T) this;
+         }
+         catch (ClassCastException e) {
+             throw new RuntimeException("Couldn't get an instance of individual. Maybe your implementation of Individual gives another Generic Type but itself to Individual.");
+         }
+     }
+
      default int compareTo(Individual o) {
  		if (getFitness() - o.getFitness() == 0)
 			return 0;
