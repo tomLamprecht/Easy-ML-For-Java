@@ -28,7 +28,7 @@ public abstract class MultiThreadHelper
 		ThrowingRunnable.unchecked( () -> executorService.invokeAll(calls) ).run();
 	}
 
-	private static Callable<Void> transformToCallableVoid(Runnable runnable){
+	public static Callable<Void> transformToCallableVoid(Runnable runnable){
 		return () -> {
 			runnable.run();
 			return null;
