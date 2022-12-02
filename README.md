@@ -14,7 +14,7 @@ It uses *Neural Networks* than can be described by the user of this Framework an
 
 - [Get Started](#get-started)
 
-- [Example](#EXAMPLE)
+- [Example](#example)
 
 - [Classes and Interfaces of the Neural Network](#classes-nn)
 	- [NeuralNet](#NeuralNet)
@@ -47,7 +47,7 @@ To implement an AI for your own personal problem you will have to follow these s
 4. Configure the parameters of the [Genetic Algorithm](#genetic-algorithm)
 5. combine everything in the [GeneticAlgorithm](#genetic-algorithm).Builder class
 
-an abstract example could look like this:
+An abstract example could look like this:
 ```java
         Selector<NeuralNetIndividual> SELECTOR = new EliteSelector<>( 0.1 );
     Recombiner<NeuralNetIndividual> RECOMBINER = new NNUniformCrossoverRecombiner( 2 );
@@ -155,16 +155,16 @@ The Population Supplier is used to supply the Genetic Algorithm with a Populatio
 ```
 
 The Framework already provides a Implementation of a PopulationSupplier to read a Population from a File:\
-[PopulationByFileSupplier](\src\main\java\de\fhws\ai\geneticalgorithm\populationsupplier\PopulationSupplier.java)
+[PopulationByFileSupplier](src/main/java/de/fhws/ai/geneticalgorithm/populationsupplier/PopulationSupplier.java)
 
 ---
 <a name="Selector"></a>
 ## Selector
 The task of the Selector is to throw out the worst Individuals of the population based on their fitness values. There are many ways to achieve such a selection using differnt mathematical approaches. \
 This Framework provides 3 of them:
-* [EliteSelector](src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\EliteSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Elitism_Selection))
-* [RouletteWheelSelector](src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\RouletteWheelSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Roulette_Wheel_Selection))
-* [TournamentSelector](src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
+* [EliteSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/EliteSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Elitism_Selection))
+* [RouletteWheelSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/RouletteWheelSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Roulette_Wheel_Selection))
+* [TournamentSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
 
 It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
 A possible EliteSelector could look like this:\ 
@@ -178,10 +178,10 @@ new EliteSelector<>( 0.1 );
 The Recombiner may be used to fill up the Popluation again after the selection process.
 Again there are many different approaches.\
 This framework provides 2 of them:
-* [FillUpRecombiner](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\recombiner\FillUpRecombiner.java) (just fills up the Population with copies of the remaining Individuals)
-* [NNUniformCrossoverRecombiner](\src\main\java\de\fhws\ai\networktrainer\NNUniformCrossoverRecombiner) ([Wikipedia](https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)#Uniform_crossover))
+* [FillUpRecombiner](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/recombiner/FillUpRecombiner.java) (just fills up the Population with copies of the remaining Individuals)
+* [NNUniformCrossoverRecombiner](/src/main/java/de/fhws/ai/networktrainer/NNUniformCrossoverRecombiner.java) ([Wikipedia](https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)#Uniform_crossover))
 
-It's obviously also possible to provide your own Recombiner by Implementing the [Recombiner-Interface](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\recombiner\Recombiner.java) \
+It's obviously also possible to provide your own Recombiner by Implementing the [Recombiner-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/recombiner/Recombiner.java) \
 A possible NNUniformCrossOverRecombiner could look like:\
 ```java
 new NNUniformCrossoverRecombiner( 2 );
@@ -192,10 +192,11 @@ new NNUniformCrossoverRecombiner( 2 );
 ## Mutator
 After the Selection and Recombination process its possible to provide a third processing step called *Mutator*. Some Individuals may randomly get changed to increase the probability of a positive mutation. \
 This framework provides one of them:
-* [NNRandomMutator](\src\main\java\de\fhws\ai\networktrainer\NNRandomMutator.java) ([Wikipedia](https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)))
+* [NNRandomMutator](/src/main/java/de/fhws/ai/networktrainer/NNRandomMutator.java) ([Wikipedia](https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)))
 
-As always it's possible to provide your own Mutator by implementing the [Mutator-Interface](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\Mutator.java) \ 
-A possible NNRandomMutator could look like:\
+As always it's possible to provide your own Mutator by implementing the [Mutator-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/Mutator.java).
+\
+A possible NNRandomMutator could look like:
 ```java
 new NNRandomMutator( 0.2, 0.4, new Randomizer( -0.01, 0.01 ), 0.01 );
 ```
@@ -204,13 +205,22 @@ new NNRandomMutator( 0.2, 0.4, new Randomizer( -0.01, 0.01 ), 0.01 );
 <a name="genetic-algorithm"></a>
 ## Genetic Algorithm
 
-To create your own *Genetic Algorithm* you will need to build one using the [GeneticBuilder](\src\main\java\de\fhws\ai\geneticalgorithm\GeneticAlgorithm.java) Class.This class can be given the many optional parameters, the most essential ones will be listed below:
+To create your own *Genetic Algorithm* you will need to build one using the [GeneticAlgorithm.Builder](/src/main/java/de/fhws/ai/geneticalgorithm/GeneticAlgorithm.java) Class.This class can be given the many optional parameters, the most essential ones will be listed below:
 
 - [PopulationSupplier](#PopulationSupplier) - provides the first Population
 - Generations - Amount of generations that should be calculated
 - [Selector](#Selector) - Is used for the Selection process
 - [Recombiner](#Recombiner) - Is used for the recombination process *(Optional)*
-- [Mutator](#Mutator) - Is used for the mutation process *(Optional)*
+- [Mutator](#Mutator) - Is used for the mutation process *(Optional)* \
+A abstract Example for a GeneticAlgorithm could look like this: 
+```java
+ new GeneticAlgorithm.Builder<>( POPULATION_SUPPLIER, GENS_AMOUNT, SELECTOR )
+                        .withRecombiner( RECOMBINER )
+                        .withMutator( MUTATOR )
+                        .build( );
+```
+With the ```.withMutliThreaded(//amount of Threads);``` method it's also possible to processes the evolution in a parallel matter. 
+
 ---
 <a name="NetworkTrainer"></a>
 ## Classes and Interfaces of the NetworkTrainer
@@ -241,7 +251,7 @@ This class provides a Population of NeuralNetIndviduals, using
 * the size of the population as int\
 e.g:
 ```java
- NeuralNetPopulationSupplier supplier = new NeuralNetPopulationSupplier( () -> new NeuralNet.Builder..., (nn) -> //calculate Fitness, POP_SIZE );
+ NeuralNetPopulationSupplier supplier = new NeuralNetPopulationSupplier( () -> new NeuralNet.Builder..., (nn) -> /*calculate Fitness*/, POP_SIZE );
 ```
 
 ---
