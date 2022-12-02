@@ -32,7 +32,7 @@ public class SimpleFunctionPredictionExample {
         // Random Weights between -10 and 10
         // Random Bias between 0 and 2
         NeuralNetSupplier neuralNetSupplier = ( ) -> new NeuralNet.Builder( 1, 1 )
-                .addLayer( 1 )
+                .addLayer( 3 )
                 .withActivationFunction( x -> x )
                 .withWeightRandomizer( new Randomizer( -10, 10 ) )
                 .withBiasRandomizer( new Randomizer( 0, 2 ) )
