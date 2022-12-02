@@ -210,7 +210,16 @@ To create your own *Genetic Algorithm* you will need to build one using the [Gen
 - Generations - Amount of generations that should be calculated
 - [Selector](#Selector) - Is used for the Selection process
 - [Recombiner](#Recombiner) - Is used for the recombination process *(Optional)*
-- [Mutator](#Mutator) - Is used for the mutation process *(Optional)*
+- [Mutator](#Mutator) - Is used for the mutation process *(Optional)* \
+A abstract Example for a GeneticAlgorithm could look like this: 
+```java
+ new GeneticAlgorithm.Builder<>( POPULATION_SUPPLIER, GENS_AMOUNT, SELECTOR )
+                        .withRecombiner( RECOMBINER )
+                        .withMutator( MUTATOR )
+                        .build( );
+```
+With the ```.withMutliThreaded(//amount of Threads);``` method it's also possible to processes the evolution in a parallel matter. 
+
 ---
 <a name="NetworkTrainer"></a>
 ## Classes and Interfaces of the NetworkTrainer
