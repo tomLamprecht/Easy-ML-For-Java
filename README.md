@@ -47,7 +47,7 @@ To implement an AI for your own personal problem you will have to follow these s
 4. Configure the parameters of the [Genetic Algorithm](#genetic-algorithm)
 5. combine everything in the [GeneticAlgorithm](#genetic-algorithm).Builder class
 
-an abstract example could look like this:
+An abstract example could look like this:
 ```java
         Selector<NeuralNetIndividual> SELECTOR = new EliteSelector<>( 0.1 );
     Recombiner<NeuralNetIndividual> RECOMBINER = new NNUniformCrossoverRecombiner( 2 );
@@ -194,8 +194,9 @@ After the Selection and Recombination process its possible to provide a third pr
 This framework provides one of them:
 * [NNRandomMutator](/src/main/java/de/fhws/ai/networktrainer/NNRandomMutator.java) ([Wikipedia](https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)))
 
-As always it's possible to provide your own Mutator by implementing the [Mutator-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/Mutator.java) \ 
-A possible NNRandomMutator could look like:\
+As always it's possible to provide your own Mutator by implementing the [Mutator-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/Mutator.java).
+\
+A possible NNRandomMutator could look like:
 ```java
 new NNRandomMutator( 0.2, 0.4, new Randomizer( -0.01, 0.01 ), 0.01 );
 ```
@@ -204,7 +205,7 @@ new NNRandomMutator( 0.2, 0.4, new Randomizer( -0.01, 0.01 ), 0.01 );
 <a name="genetic-algorithm"></a>
 ## Genetic Algorithm
 
-To create your own *Genetic Algorithm* you will need to build one using the [GeneticBuilder](/src/main/java/de/fhws/ai/geneticalgorithm/GeneticAlgorithm.java) Class.This class can be given the many optional parameters, the most essential ones will be listed below:
+To create your own *Genetic Algorithm* you will need to build one using the [GeneticAlgorithm.Builder](/src/main/java/de/fhws/ai/geneticalgorithm/GeneticAlgorithm.java) Class.This class can be given the many optional parameters, the most essential ones will be listed below:
 
 - [PopulationSupplier](#PopulationSupplier) - provides the first Population
 - Generations - Amount of generations that should be calculated
@@ -250,7 +251,7 @@ This class provides a Population of NeuralNetIndviduals, using
 * the size of the population as int\
 e.g:
 ```java
- NeuralNetPopulationSupplier supplier = new NeuralNetPopulationSupplier( () -> new NeuralNet.Builder..., (nn) -> //calculate Fitness, POP_SIZE );
+ NeuralNetPopulationSupplier supplier = new NeuralNetPopulationSupplier( () -> new NeuralNet.Builder..., (nn) -> /*calculate Fitness*/, POP_SIZE );
 ```
 
 ---
