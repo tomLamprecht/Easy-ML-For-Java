@@ -54,7 +54,7 @@ public class SimpleFunctionPredictionExample {
                .withRecombiner(RECOMBINER)
                .withMutator(MUTATOR)
                .withMultiThreaded(16) //uses 16 Threads to process
-               .withLogger(new IntervallConsoleLogger(100)) //used to print logging info in the console
+               .withLoggers(new IntervallConsoleLogger(100)) //used to print logging info in the console
                .build();
 
        NeuralNetIndividual result = geneticAlgorithm.solve();
