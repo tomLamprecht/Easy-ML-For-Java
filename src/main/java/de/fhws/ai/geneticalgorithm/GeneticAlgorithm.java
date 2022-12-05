@@ -7,6 +7,9 @@ import de.fhws.ai.geneticalgorithm.evolution.selector.Selector;
 import de.fhws.ai.geneticalgorithm.populationsupplier.PopulationSupplier;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,14 +29,14 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
     private final Optional<IntConsumer> genPreperator;
     private final Optional<IntervalSaver> saver;
-    private final Optional<Logger> logger;
+    private final List<Logger> loggers;
 
     private Optional<ExecutorService> executor = Optional.empty();
 
     private final AtomicBoolean shutdowned = new AtomicBoolean(false);
 
     private GeneticAlgorithm( PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector,
-                              Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, Logger logger,
+                              Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, List<Logger> loggers,
                               int amountThreads) {
         this.population = popSupplier.get();
         this.maxGens = maxGens + population.getGeneration();
@@ -43,7 +46,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
         this.mutator = Optional.ofNullable(mutator);
         this.genPreperator = Optional.ofNullable(genPreperator);
         this.saver = Optional.ofNullable(saver);
-        this.logger = Optional.ofNullable(logger);
+        this.loggers = loggers;
 
         if (amountThreads > 1)
             executor = Optional.of(Executors.newWorkStealingPool( amountThreads ));
@@ -116,11 +119,11 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     private void doEvolutionFollowUp() {
         callSaver();
 
-        callLogger();
+        callLoggers();
     }
 
-    private void callLogger() {
-        logger.ifPresent(logger -> logger.log(maxGens, population));
+    private void callLoggers() {
+        loggers.forEach(logger -> logger.log(maxGens, population));
     }
 
     private void callSaver() {
@@ -171,7 +174,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
         private IntConsumer genPreperator;
         private IntervalSaver saver;
-        private Logger logger;
+        private List<Logger> loggers = new ArrayList<>();
 
         private int amountThreads;
 
@@ -232,12 +235,12 @@ public class GeneticAlgorithm<T extends Individual<T>> {
         }
 
         /**
-         * The Logger will be called after every generation and can be used to log the current state of the solving process
-         * @param logger provides logging method
+         * The Loggers will be called after every generation and can be used to log the current state of the solving process
+         * @param loggers provides logging method
          * @return itself, due to Builder-Pattern
          */
-        public Builder<T> withLogger(Logger logger) {
-            this.logger = logger;
+        public Builder<T> withLoggers(Logger ... loggers) {
+            this.loggers.addAll(Arrays.asList(loggers));
             return this;
         }
 
@@ -261,7 +264,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
          */
         public GeneticAlgorithm<T> build() {
             return new GeneticAlgorithm<>(popSupplier, maxGens, selector, recombiner, mutator, genPreperator, saver,
-                    logger, amountThreads);
+                    loggers, amountThreads);
         }
     }
 
