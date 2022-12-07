@@ -34,7 +34,6 @@ public class TestNetworkTrainerBlackBox {
     @Test
     public void test_simple_number_prediction( ) {
 
-
         int countSuccess = 0;
 
         for ( int i = 0; i < DO_TEST_TIMES; i++ ) {
@@ -51,7 +50,6 @@ public class TestNetworkTrainerBlackBox {
 
         System.out.println( "Neural net success: " + countSuccess + " / " + DO_TEST_TIMES );
         assertTrue( countSuccess >= DO_TEST_TIMES * PERCENTAGE_TO_PASS );
-
     }
 
     private NeuralNet evolveNetwork( int NUMBER, int GENS, int POP_SIZE ) {
