@@ -79,6 +79,9 @@ An abstract example could look like this:
 This example will show how to use the Framework for a number prediction based on the simple mathematic equation: f(x) = 2x\
 [EXAMPLE](src/main/java/example/SimpleFunctionPredictionExample.java)
 
+This one includes a basic implementation of the game "Snake" and will show the use of a more complex scenario of the Framework.
+[SNAKE EXAMPLE](src/main/java/example/SnakeGameExample/snakegame/Main.java)
+
 ---
 <a name="classes-nn"></a>
 ## Classes and Interfaces of the Neural Network:
