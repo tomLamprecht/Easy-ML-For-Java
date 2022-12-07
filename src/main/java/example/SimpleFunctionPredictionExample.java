@@ -7,6 +7,8 @@ import de.fhws.ai.geneticalgorithm.evolution.recombiner.Recombiner;
 import de.fhws.ai.geneticalgorithm.evolution.selector.EliteSelector;
 import de.fhws.ai.geneticalgorithm.evolution.selector.Selector;
 import de.fhws.ai.geneticalgorithm.logger.IntervallConsoleLogger;
+import de.fhws.ai.geneticalgorithm.logger.graphplotter.lines.AvgFitnessLine;
+import de.fhws.ai.geneticalgorithm.logger.graphplotter.GraphPlotLogger;
 import de.fhws.ai.linearalgebra.Randomizer;
 import de.fhws.ai.linearalgebra.Vector;
 import de.fhws.ai.networktrainer.*;
@@ -54,7 +56,7 @@ public class SimpleFunctionPredictionExample {
                .withRecombiner(RECOMBINER)
                .withMutator(MUTATOR)
                .withMultiThreaded(16) //uses 16 Threads to process
-               .withLoggers(new IntervallConsoleLogger(100)) //used to print logging info in the console
+               .withLoggers(new IntervallConsoleLogger(100), new GraphPlotLogger(1000, "plot",new AvgFitnessLine())) //used to print logging info in the console
                .build();
 
        NeuralNetIndividual result = geneticAlgorithm.solve();
