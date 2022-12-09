@@ -3,12 +3,12 @@ package de.fhws.ai.geneticalgorithm.logger;
 import de.fhws.ai.geneticalgorithm.Individual;
 import de.fhws.ai.geneticalgorithm.Population;
 
-public class IntervallConsoleLogger implements Logger{
+public class IntervalConsoleLogger implements Logger{
 
     ConsoleLogger logger = new ConsoleLogger();
     final int intervall;
     int counter = 0;
-    public IntervallConsoleLogger(int intervall) {
+    public IntervalConsoleLogger(int intervall) {
         this.intervall = intervall;
     }
 
