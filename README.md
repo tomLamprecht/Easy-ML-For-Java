@@ -9,7 +9,7 @@
 
 # Overview
 
-This Framework can be used to implement a Maschine Learning Algorithm.\
+This Framework can be used to implement a Machine Learning Algorithm.\
 It uses *Neural Networks* than can be described by the user of this Framework and an *Genetic Algorithm* to train those Networks. All Parameters can be choosen freely.
 
 - [Get Started](#get-started)
@@ -55,8 +55,8 @@ An abstract example could look like this:
     int GENS = 50;
     NeuralNetFitnessFunction FITNESS_FUNCTION = (nn) -> //calculate Fitness; 
 
-    NeuralNetSupplier neuralNetSupplier = ( ) -> new NeuralNet.Builder( 100, 2 )
-                .addLayer( 50 )
+    NeuralNetSupplier neuralNetSupplier = ( ) -> new NeuralNet.Builder( NEURALNET_INPUT_SIZE, NEURALNET_OUTPUT_SIZE )
+                .addLayer( HIDDEN_LAYER_SIZE )
                 .withActivationFunction( x -> x )
                 .build( );
                 
@@ -102,7 +102,12 @@ with the method
 ```java
 withActivationFunction(...)
 ```
-you can provide your own Activation Function. The default one is (1 + tanh(x / 2))/2 
+you can provide your own Activation Function. The default one is
+
+$$
+f(x) =  \frac{1 + tanh\Bigl(\frac{x}{2}\Bigr)}{2}
+$$ 
+
 \
 The most simple one would be:
 
@@ -170,7 +175,7 @@ This Framework provides 3 of them:
 * [TournamentSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
 
 It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
-A possible EliteSelector could look like this:\ 
+A possible EliteSelector could look like this:
 ```java
 new EliteSelector<>( 0.1 );
 ```
@@ -185,7 +190,7 @@ This framework provides 2 of them:
 * [NNUniformCrossoverRecombiner](/src/main/java/de/fhws/ai/networktrainer/NNUniformCrossoverRecombiner.java) ([Wikipedia](https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)#Uniform_crossover))
 
 It's obviously also possible to provide your own Recombiner by Implementing the [Recombiner-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/recombiner/Recombiner.java) \
-A possible NNUniformCrossOverRecombiner could look like:\
+A possible NNUniformCrossOverRecombiner could look like:
 ```java
 new NNUniformCrossoverRecombiner( 2 );
 ```
