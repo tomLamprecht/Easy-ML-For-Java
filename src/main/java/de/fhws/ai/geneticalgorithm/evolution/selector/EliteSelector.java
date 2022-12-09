@@ -13,7 +13,7 @@ public class EliteSelector<T extends Individual<T>> extends PercentageSelector<T
     }
 
     @Override
-    public void select(Population<T> pop, Optional<ExecutorService> executorService) {
+    public void select(Population<T> pop, ExecutorService executorService) {
         pop.sortPopByFitness();
         repopulate(pop);
     }

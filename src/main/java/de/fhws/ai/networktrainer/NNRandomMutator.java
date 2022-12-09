@@ -52,12 +52,12 @@ public class NNRandomMutator implements Mutator<NeuralNetIndividual> {
     }
 
     @Override
-    public void mutate( Population<NeuralNetIndividual> pop, Optional<ExecutorService> executorService ) {
+    public void mutate( Population<NeuralNetIndividual> pop, ExecutorService executorService ) {
         Stream<NeuralNetIndividual> filteredIndividuals = getFilteredIndividuals( pop );
 
         Consumer<NeuralNetIndividual> mutateConsumer = individual -> mutateNN( individual.getNN( ) );
-        if ( executorService.isPresent( ) )
-            MultiThreadHelper.callConsumerOnStream( executorService.get( ), filteredIndividuals, mutateConsumer );
+        if ( executorService != null )
+            MultiThreadHelper.callConsumerOnStream( executorService, filteredIndividuals, mutateConsumer );
         else
             filteredIndividuals
                     .forEach( mutateConsumer );
@@ -90,8 +90,8 @@ public class NNRandomMutator implements Mutator<NeuralNetIndividual> {
         }
 
         @Override
-        public void mutate( Population<NeuralNetIndividual> pop, Optional<ExecutorService> executorService ) {
-            super.mutate( pop, Optional.empty( ) );
+        public void mutate( Population<NeuralNetIndividual> pop, ExecutorService executorService ) {
+            super.mutate( pop, null );
         }
     }
 }

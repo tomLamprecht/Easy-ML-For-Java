@@ -8,5 +8,5 @@ import java.util.concurrent.ExecutorService;
 
 public interface Selector<T extends Individual<T>> {
 	
-	void select(Population<T> pop, Optional<ExecutorService> executorService);
+	void select(Population<T> pop, ExecutorService executorService);
 }

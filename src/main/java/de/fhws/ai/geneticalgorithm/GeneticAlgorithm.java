@@ -24,32 +24,31 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     private final int maxGens;
     private final Population<T> population;
     private final Selector<T> selector;
-    private final Optional<Recombiner<T>> recombiner;
-    private final Optional<Mutator<T>> mutator;
+    private final Recombiner<T> recombiner;
+    private final Mutator<T> mutator;
 
-    private final Optional<IntConsumer> genPreperator;
-    private final Optional<IntervalSaver> saver;
+    private final IntConsumer getPreparator;
+    private final IntervalSaver saver;
     private final List<Logger> loggers;
 
-    private Optional<ExecutorService> executor = Optional.empty();
+    private final ExecutorService executor;
 
     private final AtomicBoolean shutdowned = new AtomicBoolean(false);
 
-    private GeneticAlgorithm( PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector,
-                              Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer genPreperator, IntervalSaver saver, List<Logger> loggers,
-                              int amountThreads) {
+    private GeneticAlgorithm(PopulationSupplier<T> popSupplier, int maxGens, Selector<T> selector,
+                             Recombiner<T> recombiner, Mutator<T> mutator, IntConsumer getPreparator, IntervalSaver saver, List<Logger> loggers,
+                             int amountThreads) {
         this.population = popSupplier.get();
         this.maxGens = maxGens + population.getGeneration();
         this.size = population.getSize();
         this.selector = selector;
-        this.recombiner = Optional.ofNullable(recombiner);
-        this.mutator = Optional.ofNullable(mutator);
-        this.genPreperator = Optional.ofNullable(genPreperator);
-        this.saver = Optional.ofNullable(saver);
+        this.recombiner = recombiner;
+        this.mutator = mutator;
+        this.getPreparator = getPreparator;
+        this.saver = saver;
         this.loggers = loggers;
 
-        if (amountThreads > 1)
-            executor = Optional.of(Executors.newWorkStealingPool( amountThreads ));
+        this.executor = amountThreads > 1 ? Executors.newWorkStealingPool( amountThreads ) : null;
 
     }
 
@@ -91,7 +90,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     private void shutdownGeneticAlgorithm()
     {
         shutdowned.set(true);
-        executor.ifPresent( ExecutorService::shutdown );
+        getExecutor().ifPresent( ExecutorService::shutdown );
     }
 
     private T getBestIndividual() {
@@ -127,7 +126,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     }
 
     private void callSaver() {
-        saver.ifPresent(saver -> saver.save(population));
+        getSaver().ifPresent(saver -> saver.save(population));
     }
 
     private void evoluteNextGen() {
@@ -143,11 +142,11 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     }
 
     private void doMutation() {
-        mutator.ifPresent(m -> m.mutate(population, executor));
+        getMutator().ifPresent(m -> m.mutate(population, executor));
     }
 
     private void doRecombination() {
-        recombiner.ifPresent(r -> r.recombine(population, size, executor));
+        getRecombiner().ifPresent(r -> r.recombine(population, size, executor));
         size = population.getSize();
     }
 
@@ -156,12 +155,32 @@ public class GeneticAlgorithm<T extends Individual<T>> {
     }
 
     private void callGenPreperator() {
-        genPreperator.ifPresent(c -> c.accept(population.getGeneration()));
+        getGetPreparator().ifPresent(c -> c.accept(population.getGeneration()));
     }
 
     public boolean isShutdowned()
     {
         return shutdowned.get();
+    }
+
+    public Optional<Recombiner<T>> getRecombiner() {
+        return Optional.ofNullable(recombiner);
+    }
+
+    public Optional<Mutator<T>> getMutator() {
+        return Optional.ofNullable(mutator);
+    }
+
+    public Optional<IntConsumer> getGetPreparator() {
+        return Optional.ofNullable(getPreparator);
+    }
+
+    public Optional<IntervalSaver> getSaver() {
+        return Optional.ofNullable(saver);
+    }
+
+    public Optional<ExecutorService> getExecutor() {
+        return Optional.ofNullable(executor);
     }
 
     public static class Builder<T extends Individual<T>> {

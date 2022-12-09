@@ -23,7 +23,7 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
     }
 
     @Override
-    public void select(Population<T> pop, Optional<ExecutorService> executorService) {
+    public void select(Population<T> pop, ExecutorService executorService) {
         double totalFitness = calcTotalFitness(pop);
 
         List<Double> probabilityList = calcProbabilityList(pop, totalFitness);
@@ -54,7 +54,7 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
         return probabilityList;
     }
 
-    private List<Individual<T>> repopulate(Population<T> pop, List<Double> probabilityList, Optional<ExecutorService> executorService) {
+    private List<Individual<T>> repopulate(Population<T> pop, List<Double> probabilityList, ExecutorService executorService) {
         int goalSize = super.calcGoalSize(pop.getSize());
 
         List<Individual<T>> repopulated = new ArrayList<>(goalSize);
@@ -63,8 +63,8 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
             repopulated.add(pop.getBest());
         }
 
-        if(executorService.isPresent()) {
-            return doRepopulateMultiThreaded(pop, probabilityList, executorService.get(), goalSize, repopulated);
+        if(executorService != null) {
+            return doRepopulateMultiThreaded(pop, probabilityList, executorService, goalSize, repopulated);
         }
         else {
             return doRepopulateSingleThreaded(pop, probabilityList, goalSize, repopulated);
@@ -119,9 +119,9 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
             super(percent, ensureAddFirst);
         }
 
-        @Override public void select(Population<T> pop, Optional<ExecutorService> executorService)
+        @Override public void select(Population<T> pop, ExecutorService executorService)
         {
-            super.select(pop, Optional.empty());
+            super.select(pop, null);
         }
     }
 
@@ -132,8 +132,8 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
         }
 
         @Override
-        public void select( Population<T> pop, Optional<ExecutorService> executorService ) {
-            super.select( pop, Optional.empty() );
+        public void select( Population<T> pop, ExecutorService executorService ) {
+            super.select( pop, null );
         }
     }
 

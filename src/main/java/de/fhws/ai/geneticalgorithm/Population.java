@@ -20,9 +20,9 @@ public final class Population<T extends Individual<T>> implements Serializable {
         this.individuals = new ArrayList<>(individuals);
     }
 
-    void calcFitnesses(Optional<ExecutorService> executor) {
-        if(executor.isPresent()) {
-            MultiThreadHelper.callConsumerOnCollection(executor.get(), individuals, T::calcFitness);
+    void calcFitnesses(ExecutorService executor) {
+        if(executor != null) {
+            MultiThreadHelper.callConsumerOnCollection(executor, individuals, T::calcFitness);
         }
         else {
             individuals.forEach(T::calcFitness);

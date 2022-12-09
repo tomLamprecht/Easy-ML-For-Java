@@ -21,11 +21,11 @@ public class NNUniformCrossoverRecombiner implements Recombiner<NeuralNetIndivid
     }
 
     @Override
-    public void recombine( Population<NeuralNetIndividual> pop, int goalSize, Optional<ExecutorService> executorService ) {
+    public void recombine( Population<NeuralNetIndividual> pop, int goalSize, ExecutorService executorService ) {
         Validator.value( amountOfParentsPerChild ).isBetweenOrThrow( 1, pop.getSize( ) );
 
-        if ( executorService.isPresent( ) ) {
-            recombineMultiThreaded( pop, goalSize, executorService.get( ) );
+        if ( executorService != null ) {
+            recombineMultiThreaded( pop, goalSize, executorService );
         } else {
             recombineSingleThreaded( pop, goalSize );
         }
@@ -97,8 +97,8 @@ public class NNUniformCrossoverRecombiner implements Recombiner<NeuralNetIndivid
         }
 
         @Override
-        public void recombine( Population<NeuralNetIndividual> pop, int goalSize, Optional<ExecutorService> executorService ) {
-            super.recombine( pop, goalSize, Optional.empty( ) );
+        public void recombine( Population<NeuralNetIndividual> pop, int goalSize, ExecutorService executorService ) {
+            super.recombine( pop, goalSize, null );
         }
     }
 

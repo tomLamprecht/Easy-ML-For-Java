@@ -18,7 +18,7 @@ public class TournamentSelector<T extends Individual<T>> extends PercentageSelec
     }
 
     @Override
-    public void select(Population<T> pop, Optional<ExecutorService> executorService) {
+    public void select(Population<T> pop, ExecutorService executorService) {
         int goalSize = super.calcGoalSize(pop.getSize());
 
         if(tournamentSize > pop.getSize())
