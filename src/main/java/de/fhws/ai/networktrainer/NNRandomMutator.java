@@ -6,8 +6,8 @@ import de.fhws.ai.linearalgebra.Randomizer;
 import de.fhws.ai.neuralnetwork.NeuralNet;
 import de.fhws.ai.utility.MultiThreadHelper;
 import de.fhws.ai.utility.Validator;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 public class NNRandomMutator implements Mutator<NeuralNetIndividual> {
 
     private final double outerMutationRate;
-    private double innerMutationRate;
 
     private final DoubleUnaryOperator innerMutator;
 
@@ -40,7 +39,6 @@ public class NNRandomMutator implements Mutator<NeuralNetIndividual> {
         Validator.value( innerMutationRate ).isBetweenOrThrow( 0, 1 );
 
         this.outerMutationRate = outerMutationRate;
-        this.innerMutationRate = innerMutationRate;
 
         innerMutator = d -> {
             if ( ThreadLocalRandom.current( ).nextDouble( ) < innerMutationRate ) {
@@ -52,7 +50,7 @@ public class NNRandomMutator implements Mutator<NeuralNetIndividual> {
     }
 
     @Override
-    public void mutate( Population<NeuralNetIndividual> pop, ExecutorService executorService ) {
+    public void mutate( Population<NeuralNetIndividual> pop, @Nullable ExecutorService executorService ) {
         Stream<NeuralNetIndividual> filteredIndividuals = getFilteredIndividuals( pop );
 
         Consumer<NeuralNetIndividual> mutateConsumer = individual -> mutateNN( individual.getNN( ) );

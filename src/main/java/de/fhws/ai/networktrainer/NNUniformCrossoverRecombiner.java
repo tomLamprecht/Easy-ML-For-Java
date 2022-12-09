@@ -6,9 +6,9 @@ import de.fhws.ai.neuralnetwork.Layer;
 import de.fhws.ai.utility.ListUtility;
 import de.fhws.ai.utility.MultiThreadHelper;
 import de.fhws.ai.utility.Validator;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,12 +16,13 @@ public class NNUniformCrossoverRecombiner implements Recombiner<NeuralNetIndivid
 
     private int amountOfParentsPerChild;
 
+    //TODO Add Documentation for NNUniformCrossoverRecombiner
     public NNUniformCrossoverRecombiner( int amountOfParentsPerChild ) {
         this.amountOfParentsPerChild = amountOfParentsPerChild;
     }
 
     @Override
-    public void recombine( Population<NeuralNetIndividual> pop, int goalSize, ExecutorService executorService ) {
+    public void recombine( Population<NeuralNetIndividual> pop, int goalSize, @Nullable ExecutorService executorService ) {
         Validator.value( amountOfParentsPerChild ).isBetweenOrThrow( 1, pop.getSize( ) );
 
         if ( executorService != null ) {

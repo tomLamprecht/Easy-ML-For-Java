@@ -2,14 +2,13 @@ package de.fhws.ai.geneticalgorithm.evolution.selector;
 
 import de.fhws.ai.geneticalgorithm.Individual;
 import de.fhws.ai.geneticalgorithm.Population;
-import de.fhws.ai.networktrainer.NNUniformCrossoverRecombiner;
 import de.fhws.ai.utility.MultiThreadHelper;
 import de.fhws.ai.utility.throwingintefaces.ThrowingRunnable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
@@ -23,7 +22,7 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
     }
 
     @Override
-    public void select(Population<T> pop, ExecutorService executorService) {
+    public void select(Population<T> pop, @Nullable ExecutorService executorService) {
         double totalFitness = calcTotalFitness(pop);
 
         List<Double> probabilityList = calcProbabilityList(pop, totalFitness);
@@ -31,7 +30,6 @@ public class RouletteWheelSelector<T extends Individual<T>> extends PercentageSe
         List<Individual<T>> repopulated = repopulate(pop, probabilityList, executorService);
 
         pop.replaceAllIndividuals(repopulated);
-
     }
 
 

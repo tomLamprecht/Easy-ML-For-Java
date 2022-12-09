@@ -2,8 +2,12 @@ package de.fhws.ai.geneticalgorithm.evolution.selector;
 
 import de.fhws.ai.geneticalgorithm.Individual;
 import de.fhws.ai.geneticalgorithm.Population;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
 public class TournamentSelector<T extends Individual<T>> extends PercentageSelector<T> {
@@ -18,7 +22,7 @@ public class TournamentSelector<T extends Individual<T>> extends PercentageSelec
     }
 
     @Override
-    public void select(Population<T> pop, ExecutorService executorService) {
+    public void select(Population<T> pop, @Nullable ExecutorService executorService) {
         int goalSize = super.calcGoalSize(pop.getSize());
 
         if(tournamentSize > pop.getSize())
