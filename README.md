@@ -216,7 +216,7 @@ new NNRandomMutator( 0.2, 0.4, new Randomizer( -0.01, 0.01 ), 0.01 );
 ---
 <a name="logger"></a>
 ## Logger
-This Interface is just used to log the huge amount of metadata that is beeing generated in the evolution process. There are 2 Implementations of this Interface already given:
+This Interface is just used to log the huge amount of metadata that is beeing generated in the evolution process. There are 3 Implementations of this Interface already given:
 * [ConsoleLogger](/src/main/java/de/fhws/ai/geneticalgorithm/logger/ConsoleLogger.java)  (Prints Metadata in console)
 * [IntervalConsoleLogger](/src/main/java/de/fhws/ai/geneticalgorithm/logger/IntervalConsoleLogger.java) (Prints Metadata in a interval in the console)
 * [GraphPlotLogger](/src/main/java/de/fhws/ai/geneticalgorithm/logger/graphplotter/GraphPlotLogger.java) (Creates a .xls file with a chart of the Fitness Values)
