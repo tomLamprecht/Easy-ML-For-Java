@@ -1,6 +1,5 @@
 package de.fhws.ai.geneticalgorithm.logger.graphplotter.lines;
 
-import de.fhws.ai.geneticalgorithm.Individual;
 import de.fhws.ai.geneticalgorithm.Population;
 
 import java.util.ArrayList;

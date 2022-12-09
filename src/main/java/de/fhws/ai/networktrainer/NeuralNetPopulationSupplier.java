@@ -2,7 +2,6 @@ package de.fhws.ai.networktrainer;
 
 import de.fhws.ai.geneticalgorithm.Population;
 import de.fhws.ai.geneticalgorithm.populationsupplier.PopulationSupplier;
-import de.fhws.ai.neuralnetwork.NeuralNet;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

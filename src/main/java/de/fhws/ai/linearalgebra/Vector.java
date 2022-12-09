@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public class Vector implements Serializable {
@@ -150,11 +149,11 @@ public class Vector implements Serializable {
 
     @Override
     public String toString() {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
-            s += "| " + i + ": " + String.format("%.2f", data[i]) + " |\n";
+            s.append("| ").append(i).append(": ").append(String.format("%.2f", data[i])).append(" |\n");
         }
-        return s;
+        return s.toString();
     }
 
     @Override

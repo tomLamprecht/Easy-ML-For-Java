@@ -199,7 +199,7 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
         /**
          * Creates a Builder for a Generic Algorithm.
-         * @param popSupplier provides a initial Population
+         * @param popSupplier provides an initial Population
          * @param maxGens are the amount of generation that should be computed
          * @param selector is used for the selection process
          * @see <a href="https://docs.oracle.com/middleware/1221/jdev/api-reference-esdk/oracle/javatools/patterns/Builder.html">Java-Doc for Builder-Pattern</a>

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 public class Matrix implements Serializable {
 

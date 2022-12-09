@@ -31,7 +31,7 @@ public final class FileHandler {
 	 * @param override   True means the generated File location gets overwritten if
 	 *                   its filename already existed. False means the object gets
 	 *                   appended to the generated File location. @param counting ==
-	 *                   true prevents a collision of a existing file and the
+	 *                   true prevents a collision of an existing file and the
 	 *                   generated file location. So @param counting == true result
 	 *                   in @param override having no impact on the method.
 	 * 
@@ -56,7 +56,7 @@ public final class FileHandler {
 	
 	public static void clearFile(String fname, String dir) {
 		createSubDirIfNotExist(dir);
-		try (FileOutputStream fos = new FileOutputStream(dir + "/" + fname);){
+		try (FileOutputStream fos = new FileOutputStream(dir + "/" + fname)){
 		
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -88,15 +88,15 @@ public final class FileHandler {
 	/**
 	 * Writes a String to a File
 	 * 
-	 * @param string is the String thats being written into the file
+	 * @param string is the String that's being written into the file
 	 * @param fname  is the name of File + ending
 	 * @param dir    is the directory of the file. If it doesn't exist it will be
 	 *               created.
 	 * @param append == false results in the file being overwritten if it already
-	 *               existed. Otherwise the String would get appended
+	 *               existed. Otherwise, the String would get appended
 	 * 
 	 * @return true if the String got successfully written into the file and false
-	 *         if a Exception occurred.
+	 *         if an Exception occurred.
 	 */
 
 	public static boolean writeStringToFile(String string, String fname, String dir, boolean append) {
@@ -129,7 +129,7 @@ public final class FileHandler {
 	 * @return the read object or null if an Exception occurred.
 	 */
 	public static Object getFirstObjectFromFile(File file) {
-		try ( ObjectInputStream ois = new ObjectInputStream( Files.newInputStream( file.toPath() ) );) {
+		try ( ObjectInputStream ois = new ObjectInputStream( Files.newInputStream( file.toPath() ) )) {
 			return ois.readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -156,13 +156,11 @@ public final class FileHandler {
 	 */
 	private static String generateFullFilename(String fname, String dir, boolean counting, String fileEnding) {
 		String newfname = dir + fname;
-		File tempFile = new File(newfname);
+		File tempFile;
 		int counter = 0;
 		String[] splitted = splitUpFilename(fname);
 
-		boolean endingExists = true;
-		if (splitted[1] == null)
-			endingExists = false;
+		boolean endingExists = splitted[1] != null;
 
 		do {
 			if (endingExists)
@@ -218,7 +216,6 @@ public final class FileHandler {
 	 * Searches the directory <b> dir </b> and if not found creates it.
 	 * 
 	 * @param dir is the path of the directory
-	 * @return void
 	 */
 
 	private static void createDirIfNotExist(String dir) {

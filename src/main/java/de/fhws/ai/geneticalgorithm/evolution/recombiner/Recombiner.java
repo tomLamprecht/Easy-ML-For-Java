@@ -4,7 +4,6 @@ import de.fhws.ai.geneticalgorithm.Individual;
 import de.fhws.ai.geneticalgorithm.Population;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 @FunctionalInterface

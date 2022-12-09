@@ -4,7 +4,6 @@ import de.fhws.ai.geneticalgorithm.Individual;
 import de.fhws.ai.geneticalgorithm.Population;
 import de.fhws.ai.utility.Validator;
 
-import java.util.Comparator;
 import java.util.function.Function;
 
 public class NQuantilFitnessLine extends LineGenerator {

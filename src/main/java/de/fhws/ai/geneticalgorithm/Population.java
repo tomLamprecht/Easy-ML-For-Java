@@ -34,7 +34,7 @@ public final class Population<T extends Individual<T>> implements Serializable {
      * It uses the compareTo method of the solutions for this.
      */
     public void sortPopByFitness() {
-        Collections.sort(individuals, Comparator.reverseOrder());
+        individuals.sort(Comparator.reverseOrder());
     }
 
     public T getBest() {

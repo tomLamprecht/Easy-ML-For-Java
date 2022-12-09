@@ -202,9 +202,8 @@ public class NeuralNet implements Serializable {
             NeuralNet nn = new NeuralNet( inputSize );
 
             StreamUtil.of( layerSizes.stream() )
-                    .forEachWithBefore( inputSize, ( current, before ) -> {
-                        nn.layers.add( new Layer( current, before, activationFunction ) );
-                    } );
+                    .forEachWithBefore( inputSize, ( current, before ) ->
+                            nn.layers.add( new Layer( current, before, activationFunction ) ));
 
             return nn.randomize( weightRand, biasRand );
         }

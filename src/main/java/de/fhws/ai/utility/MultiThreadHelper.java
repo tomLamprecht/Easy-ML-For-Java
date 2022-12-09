@@ -35,11 +35,11 @@ public abstract class MultiThreadHelper
 	 */
 	public static <T> void callConsumerOnStream( ExecutorService executorService, Stream<T> stream, Consumer<T> consumer){
 
-		//DONT SIMPLFY THOSE 2 LINES
+		//DON'T SIMPLFY THOSE 2 LINES
 		//Otherwise JVM is forced to process on a single Thread
 		List<CompletableFuture<Void>> futures = stream
 				.map( element -> CompletableFuture.runAsync( () -> consumer.accept( element ), executorService) )
-				.collect( Collectors.toList());
+				.collect( Collectors.toList() );
 
 		futures.forEach( CompletableFuture::join );
 	}
