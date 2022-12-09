@@ -9,7 +9,7 @@
 
 # Overview
 
-This Framework can be used to implement a Maschine Learning Algorithm.\
+This Framework can be used to implement a Machine Learning Algorithm.\
 It uses *Neural Networks* than can be described by the user of this Framework and an *Genetic Algorithm* to train those Networks. All Parameters can be choosen freely.
 
 - [Get Started](#get-started)
