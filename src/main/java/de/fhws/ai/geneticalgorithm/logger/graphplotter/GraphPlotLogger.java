@@ -30,6 +30,14 @@ public class GraphPlotLogger implements Logger {
     private int counter = 0;
 
 
+    /**
+     * This Plotter can be used to create a .xls file including a graph with a custom name of the evolution process.
+     * @param plottingInterval is the interval in which the file gets created. It will always trigger at the end of the evolution process.
+     *                         So a value below 0 results in exactly one triggering
+     * @param filename this is the name of the resulting file without file-ending
+     * @param chartTitle the title of the generating chart
+     * @param lineGenerators generate the plots in the chart
+     */
     public GraphPlotLogger(int plottingInterval, String filename, String chartTitle, LineGenerator... lineGenerators) {
         this.plottingInterval = plottingInterval;
         this.filename = filename;
