@@ -49,6 +49,7 @@ To implement an AI for your own personal problem you will have to follow these s
 3. Choose and configure the values of [Selector](#Selector), [Recombiner](#Recombiner) and [Mutator](#Mutator)
 4. Configure the parameters of the [Genetic Algorithm](#genetic-algorithm)
 5. combine everything in the [GeneticAlgorithm](#genetic-algorithm).Builder class
+>Finding the correct configurations is a very challenging task and you should always use [Loggers](#logger) to help you find the correct ones! 
 
 An abstract example could look like this:
 ```java
@@ -74,6 +75,7 @@ An abstract example could look like this:
     geneticAlgorithm.solve();
 
 ```
+
 
 ---
 <a name="example"></a>
@@ -222,12 +224,12 @@ This Interface is just used to log the huge amount of metadata that is beeing ge
 <a name="graph-logger"></a>
 #### GraphPlotLogger
 takes as arguements in the Constructor
-1. <u>Plotting Interval</u> as int - the interval in which the file gets created not in which the data is beeing logged
-2. <u>Filename</u> as String - Name of the file without file-ending
-3. <u>Chart Title</u> as String *(Optional)* - Title of the resulting chart, default: "Plot for Population size: {size}"
-4. <u>Line Generators</u> as LineGenerator[] - The parser for metadata into plottable double values
+	1. <u>Plotting Interval</u> as int - the interval in which the file gets created not in which the data is beeing logged
+	2. <u>Filename</u> as String - Name of the file without file-ending
+	3. <u>Chart Title</u> as String *(Optional)* - Title of the resulting chart, default: "Plot for Population size: {size}"
+	4. <u>Line Generators</u> as LineGenerator[] - The parser for metadata into plottable double values
 
-<b>LineGenerator</b>\
+<b>LineGenerator</b>
 is a abstract class that is used to parse a Population into a single double value so its plottable. You may implement your own LineGenerators but the Framework provides 4 of them: 
 * AvgFitnessLine - parses the Population to its average Fitness value
 * MaxFitnessLine - parses the Population to its maximum Fitness value
@@ -246,7 +248,7 @@ new GraphPlotLogger(plottingInterval, "plot",
  new NQuantilFitnessLine(quantilOf20Percent),  
  new NQuantilFitnessLine(quantilOf80Pecent))
 ```
-A resulting graph may look like this:
+a resulting graph may look like this:
 ![image](/plots/exampleplot/examplePlot.PNG)
 
 
