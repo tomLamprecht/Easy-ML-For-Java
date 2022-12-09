@@ -102,7 +102,12 @@ with the method
 ```java
 withActivationFunction(...)
 ```
-you can provide your own Activation Function. The default one is (1 + tanh(x / 2))/2 
+you can provide your own Activation Function. The default one is
+
+$$
+f(x) =  \frac{1 + tanh\Bigl(\frac{x}{2}\Bigr)}{2}
+$$ 
+
 \
 The most simple one would be:
 
