@@ -46,7 +46,7 @@ public class GraphPlotLogger implements Logger {
     }
 
     /**
-     * This Plotter can be used to create a .xls file including a graph of the evolution process.
+     * This Plotter can be used to create a .xls file including a graph with the title "Plot for Population size: {size}" of the evolution process.
      * @param plottingInterval is the interval in which the file gets created. It will always trigger at the end of the evolution process.
      *                         So a value below 0 results in exactly one triggering
      * @param filename this is the name of the resulting file without file-ending
