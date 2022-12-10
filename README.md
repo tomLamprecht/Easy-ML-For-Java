@@ -179,7 +179,7 @@ This Framework provides 3 of them:
 * [RouletteWheelSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/RouletteWheelSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Roulette_Wheel_Selection))
 * [TournamentSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
 
-It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
+It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
 A possible EliteSelector could look like this:
 ```java
 new EliteSelector<>( 0.1 );
@@ -224,10 +224,10 @@ This Interface is just used to log the huge amount of metadata that is beeing ge
 <a name="graph-logger"></a>
 #### GraphPlotLogger
 takes as arguements in the Constructor
-	1. <u>Plotting Interval</u> as int - the interval in which the file gets created not in which the data is beeing logged
-	2. <u>Filename</u> as String - Name of the file without file-ending
-	3. <u>Chart Title</u> as String *(Optional)* - Title of the resulting chart, default: "Plot for Population size: {size}"
-	4. <u>Line Generators</u> as LineGenerator[] - The parser for metadata into plottable double values
+1. <u>Plotting Interval</u> as int - the interval in which the file gets created not in which the data is beeing logged
+2. <u>Filename</u> as String - Name of the file without file-ending
+3. <u>Chart Title</u> as String *(Optional)* - Title of the resulting chart, default: "Plot for Population size: {size}"
+4. <u>Line Generators</u> as LineGenerator[] - The parser for metadata into plottable double values
 
 <b>LineGenerator</b>
 is a abstract class that is used to parse a Population into a single double value so its plottable. You may implement your own LineGenerators but the Framework provides 4 of them: 
