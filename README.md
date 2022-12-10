@@ -179,7 +179,7 @@ This Framework provides 3 of them:
 * [RouletteWheelSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/RouletteWheelSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Roulette_Wheel_Selection))
 * [TournamentSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
 
-It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](\src\main\java\de\fhws\ai\geneticalgorithm\evolution\selector\Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
+It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
 A possible EliteSelector could look like this:
 ```java
 new EliteSelector<>( 0.1 );
