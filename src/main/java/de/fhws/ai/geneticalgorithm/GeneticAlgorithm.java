@@ -111,14 +111,13 @@ public class GeneticAlgorithm<T extends Individual<T>> {
 
         calculateFitnesses();
 
-
         population.incGeneration();
+
+        callLoggers();
     }
 
     private void doEvolutionFollowUp() {
         callSaver();
-
-        callLoggers();
     }
 
     private void callLoggers() {
