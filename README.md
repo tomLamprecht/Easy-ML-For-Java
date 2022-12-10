@@ -84,7 +84,10 @@ An abstract example could look like this:
 This example will show how to use the Framework for a number prediction based on the simple mathematic equation: f(x) = 2x\
 [EXAMPLE](src/main/java/example/SimpleFunctionPredictionExample.java)
 
-This one includes a basic implementation of the game "Snake" and will show the use of a more complex scenario of the Framework.
+In this example the framework is used to predict if someone has diabetes or not based on given trainingsdata.\
+[DIABETES EXAMPLE](src/main/java/example/diabetesprediction/Main.java)
+
+This one includes a basic implementation of the game "Snake" and will show the use of a more complex scenario of the Framework.\
 [SNAKE EXAMPLE](src/main/java/example/SnakeGameExample/snakegame/Main.java)
 
 ---
