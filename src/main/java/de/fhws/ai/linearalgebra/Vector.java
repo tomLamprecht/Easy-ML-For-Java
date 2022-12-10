@@ -151,7 +151,7 @@ public class Vector implements Serializable {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
-            s.append("| ").append(i).append(": ").append(String.format("%.2f", data[i])).append(" |\n");
+            s.append("| ").append(i).append(": ").append(String.format("%.2f", data[i])).append(" |");
         }
         return s.toString();
     }
