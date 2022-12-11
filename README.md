@@ -1,7 +1,10 @@
-
-# Easy ML for Java
-
-
+<h1 align="center"> Easy ML for Java</h1>
+  <p align="center">
+    The easiest way to start with Machine Learning in Java!
+    <br />
+    <a href="https://easy-ml.gitbook.io/easy-ml-for-java/"><strong>Explore our Website»</strong></a>
+    <br />
+  </p>
 
 ## **Version 1.0**
 
@@ -91,6 +94,7 @@ This example will show how to use the Framework for a number prediction based on
 
 In this example the framework is used to predict if someone has diabetes or not based on given trainingsdata.\
 [DIABETES EXAMPLE](src/main/java/example/diabetesprediction/Main.java)
+> You can find a full tutorial for this example on our [Website](https://easy-ml.gitbook.io/easy-ml-for-java/fundamentals/implement-your-first-ai)
 
 This one includes a basic implementation of the game "Snake" and will show the use of a more complex scenario of the Framework.\
 [SNAKE EXAMPLE](src/main/java/example/SnakeGameExample/snakegame/Main.java)
