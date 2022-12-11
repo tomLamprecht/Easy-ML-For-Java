@@ -11,7 +11,12 @@
 # Overview
 
 This Framework can be used to implement a Machine Learning Algorithm.\
-It uses *Neural Networks* than can be described by the user of this Framework and an *Genetic Algorithm* to train those Networks. All Parameters can be choosen freely.
+It uses *Neural Networks* which are beeing trained by a *Genetic Algorithm* \
+The motivation for this Framework was that many universities and schools teach as a first language Java to their students. Sadly for Java there aren't many Machine Learning Libraries and Frameworks out there, and if there are you most likely don't want to spend months trying to learn how to use it just to try out some stuff.\
+Hence, Easy ML for Java:\
+It's easy to use and designed to be played around with. You can choose the settings of the training process and see how this affects the outcome.
+There is no wrong way to use Easy ML for Java!
+
 
 - [Get Started](#get-started)
 
