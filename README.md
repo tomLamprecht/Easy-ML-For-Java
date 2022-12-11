@@ -1,5 +1,5 @@
 
-# AI-Framework for Java
+# Easy ML for Java
 
 
 
