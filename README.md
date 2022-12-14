@@ -12,6 +12,7 @@
     <image src="https://img.shields.io/github/repo-size/tomLamprecht/easy-ml-for-java"/>
     <image src="https://img.shields.io/github/contributors/tomLamprecht/easy-ml-for-java"/>
     <image src="https://img.shields.io/github/commit-activity/m/tomLamprecht/easy-ml-for-java"/>
+    <image src="https://img.shields.io/github/languages/top/tomLamprecht/easy-ml-for-java"/>
     <image src="https://img.shields.io/snyk/vulnerabilities/github/tomLamprecht/easy-ml-for-java"/>
 </div>
 ---
