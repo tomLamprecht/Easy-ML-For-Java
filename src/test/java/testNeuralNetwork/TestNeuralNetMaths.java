@@ -1,8 +1,8 @@
 package testNeuralNetwork;
 
-import de.fhws.ai.linearalgebra.Randomizer;
-import de.fhws.ai.linearalgebra.Vector;
-import de.fhws.ai.neuralnetwork.NeuralNet;
+import de.fhws.easyml.linearalgebra.Randomizer;
+import de.fhws.easyml.linearalgebra.Vector;
+import de.fhws.easyml.ai.neuralnetwork.NeuralNet;
 import org.junit.Test;
 
 import java.util.List;

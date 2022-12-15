@@ -1,8 +1,8 @@
 package testLinearAlgebra;
 
-import de.fhws.ai.linearalgebra.LinearAlgebra;
-import de.fhws.ai.linearalgebra.Matrix;
-import de.fhws.ai.linearalgebra.Vector;
+import de.fhws.easyml.linearalgebra.LinearAlgebra;
+import de.fhws.easyml.linearalgebra.Matrix;
+import de.fhws.easyml.linearalgebra.Vector;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

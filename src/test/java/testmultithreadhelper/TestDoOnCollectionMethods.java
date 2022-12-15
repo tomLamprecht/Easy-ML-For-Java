@@ -1,8 +1,8 @@
 package testmultithreadhelper;
 
-import de.fhws.ai.utility.MultiThreadHelper;
-import de.fhws.ai.utility.WarningLogger;
-import de.fhws.ai.utility.throwingintefaces.ThrowingRunnable;
+import de.fhws.easyml.utility.MultiThreadHelper;
+import de.fhws.easyml.utility.WarningLogger;
+import de.fhws.easyml.utility.throwingintefaces.ThrowingRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 

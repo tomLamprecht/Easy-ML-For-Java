@@ -186,18 +186,18 @@ The Population Supplier is used to supply the Genetic Algorithm with a Populatio
 ```
 
 The Framework already provides a Implementation of a PopulationSupplier to read a Population from a File:\
-[PopulationByFileSupplier](src/main/java/de/fhws/ai/geneticalgorithm/populationsupplier/PopulationSupplier.java)
+[PopulationByFileSupplier](src/main/java/de/fhws/easyml/easyml/geneticalgorithm/populationsupplier/PopulationSupplier.java)
 
 ---
 <a name="Selector"></a>
 ## Selector
 The task of the Selector is to throw out the worst Individuals of the population based on their fitness values. There are many ways to achieve such a selection using differnt mathematical approaches. \
 This Framework provides 3 of them:
-* [EliteSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/EliteSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Elitism_Selection))
-* [RouletteWheelSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/RouletteWheelSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Roulette_Wheel_Selection))
-* [TournamentSelector](src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
+* [EliteSelector](src/main/java/de/fhws/easyml/easyml/geneticalgorithm/evolution/selectors/EliteSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Elitism_Selection))
+* [RouletteWheelSelector](src/main/java/de/fhws/easyml/easyml/geneticalgorithm/evolution/selectors/RouletteWheelSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Roulette_Wheel_Selection))
+* [TournamentSelector](src/main/java/de/fhws/easyml/easyml/geneticalgorithm/evolution/selectors/TournamentSelector.java) ([Wikipedia](https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Tournament_Selection))
 
-It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/selector/Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
+It is also possible to provide your own implementation though. To do this you will have to Implement the [Selector-Interface](/de/fhws/strategies/geneticalgorithm/evolution/selectors/Selector.java). Before starting to write your own Selector you may want to look into the implementation of the already given Selectors first.\
 A possible EliteSelector could look like this:
 ```java
 new EliteSelector<>( 0.1 );
@@ -209,10 +209,10 @@ new EliteSelector<>( 0.1 );
 The Recombiner may be used to fill up the Popluation again after the selection process.
 Again there are many different approaches.\
 This framework provides 2 of them:
-* [FillUpRecombiner](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/recombiner/FillUpRecombiner.java) (just fills up the Population with copies of the remaining Individuals)
-* [NNUniformCrossoverRecombiner](/src/main/java/de/fhws/ai/networktrainer/NNUniformCrossoverRecombiner.java) ([Wikipedia](https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)#Uniform_crossover))
+* [FillUpRecombiner](/de/fhws/strategies/geneticalgorithm/evolution/recombiners/FillUpRecombiner.java) (just fills up the Population with copies of the remaining Individuals)
+* [NNUniformCrossoverRecombiner](/de/fhws/easyml/ai/geneticneuralnet/NNUniformCrossoverRecombiner.java) ([Wikipedia](https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)#Uniform_crossover))
 
-It's obviously also possible to provide your own Recombiner by Implementing the [Recombiner-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/recombiner/Recombiner.java) \
+It's obviously also possible to provide your own Recombiner by Implementing the [Recombiner-Interface](/de/fhws/strategies/geneticalgorithm/evolution/recombiners/Recombiner.java) \
 A possible NNUniformCrossOverRecombiner could look like:
 ```java
 new NNUniformCrossoverRecombiner( 2 );
@@ -223,9 +223,9 @@ new NNUniformCrossoverRecombiner( 2 );
 ## Mutator
 After the Selection and Recombination process its possible to provide a third processing step called *Mutator*. Some Individuals may randomly get changed to increase the probability of a positive mutation. \
 This framework provides one of them:
-* [NNRandomMutator](/src/main/java/de/fhws/ai/networktrainer/NNRandomMutator.java) ([Wikipedia](https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)))
+* [NNRandomMutator](/de/fhws/easyml/ai/geneticneuralnet/NNRandomMutator.java) ([Wikipedia](https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)))
 
-As always it's possible to provide your own Mutator by implementing the [Mutator-Interface](/src/main/java/de/fhws/ai/geneticalgorithm/evolution/Mutator.java).
+As always it's possible to provide your own Mutator by implementing the [Mutator-Interface](/de/fhws/strategies/geneticalgorithm/evolution/Mutator.java).
 \
 A possible NNRandomMutator could look like:
 ```java
@@ -235,9 +235,9 @@ new NNRandomMutator( 0.2, 0.4, new Randomizer( -0.01, 0.01 ), 0.01 );
 <a name="logger"></a>
 ## Logger
 This Interface is just used to log the huge amount of metadata that is beeing generated in the evolution process. There are 3 Implementations of this Interface already given:
-* [ConsoleLogger](/src/main/java/de/fhws/ai/geneticalgorithm/logger/ConsoleLogger.java)  (Prints Metadata in console)
-* [IntervalConsoleLogger](/src/main/java/de/fhws/ai/geneticalgorithm/logger/IntervalConsoleLogger.java) (Prints Metadata in a interval in the console)
-* [GraphPlotLogger](/src/main/java/de/fhws/ai/geneticalgorithm/logger/graphplotter/GraphPlotLogger.java) (Creates a .xls file with a chart of the Fitness Values)
+* [ConsoleLogger](/de/fhws/strategies/geneticalgorithm/logger/ConsoleLogger.java)  (Prints Metadata in console)
+* [IntervalConsoleLogger](/de/fhws/strategies/geneticalgorithm/logger/IntervalConsoleLogger.java) (Prints Metadata in a interval in the console)
+* [GraphPlotLogger](/de/fhws/ai/geneticalgorithm/logger/loggers/graphplotter/GraphPlotLogger.java) (Creates a .xls file with a chart of the Fitness Values)
 
 <a name="graph-logger"></a>
 #### GraphPlotLogger
@@ -275,7 +275,7 @@ a resulting graph may look like this:
 <a name="genetic-algorithm"></a>
 ## Genetic Algorithm
 
-To create your own *Genetic Algorithm* you will need to build one using the [GeneticAlgorithm.Builder](/src/main/java/de/fhws/ai/geneticalgorithm/GeneticAlgorithm.java) Class.This class can be given the many optional parameters, the most essential ones will be listed below:
+To create your own *Genetic Algorithm* you will need to build one using the [GeneticAlgorithm.Builder](/de/fhws/strategies/geneticalgorithm/GeneticAlgorithm.java) Class.This class can be given the many optional parameters, the most essential ones will be listed below:
 
 - [PopulationSupplier](#PopulationSupplier) - provides the first Population
 - Generations - Amount of generations that should be calculated

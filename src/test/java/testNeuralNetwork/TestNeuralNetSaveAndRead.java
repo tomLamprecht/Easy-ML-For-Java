@@ -1,8 +1,8 @@
 package testNeuralNetwork;
 
-import de.fhws.ai.linearalgebra.Vector;
-import de.fhws.ai.neuralnetwork.NeuralNet;
-import de.fhws.ai.utility.FileHandler;
+import de.fhws.easyml.linearalgebra.Vector;
+import de.fhws.easyml.ai.neuralnetwork.NeuralNet;
+import de.fhws.easyml.utility.FileHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

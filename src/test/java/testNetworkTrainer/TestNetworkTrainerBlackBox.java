@@ -1,18 +1,15 @@
 package testNetworkTrainer;
 
-import de.fhws.ai.geneticalgorithm.GeneticAlgorithm;
-import de.fhws.ai.geneticalgorithm.evolution.Mutator;
-import de.fhws.ai.geneticalgorithm.evolution.recombiner.FillUpRecombiner;
-import de.fhws.ai.geneticalgorithm.evolution.recombiner.Recombiner;
-import de.fhws.ai.geneticalgorithm.evolution.selector.EliteSelector;
-import de.fhws.ai.geneticalgorithm.evolution.selector.RouletteWheelSelector;
-import de.fhws.ai.geneticalgorithm.evolution.selector.Selector;
-import de.fhws.ai.geneticalgorithm.logger.ConsoleLogger;
-import de.fhws.ai.linearalgebra.Randomizer;
-import de.fhws.ai.linearalgebra.Vector;
-import de.fhws.ai.networktrainer.*;
-import de.fhws.ai.neuralnetwork.NeuralNet;
-import de.fhws.ai.utility.Validator;
+import de.fhws.easyml.ai.geneticneuralnet.*;
+import de.fhws.easyml.geneticalgorithm.GeneticAlgorithm;
+import de.fhws.easyml.geneticalgorithm.evolution.Mutator;
+import de.fhws.easyml.geneticalgorithm.evolution.Recombiner;
+import de.fhws.easyml.geneticalgorithm.evolution.selectors.EliteSelector;
+import de.fhws.easyml.geneticalgorithm.evolution.Selector;
+import de.fhws.easyml.linearalgebra.Randomizer;
+import de.fhws.easyml.linearalgebra.Vector;
+import de.fhws.easyml.ai.neuralnetwork.NeuralNet;
+import de.fhws.easyml.utility.Validator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

@@ -1,20 +1,20 @@
 package example.SnakeGameExample.snakegame;
 
-import de.fhws.ai.geneticalgorithm.GeneticAlgorithm;
-import de.fhws.ai.geneticalgorithm.evolution.Mutator;
-import de.fhws.ai.geneticalgorithm.evolution.recombiner.Recombiner;
-import de.fhws.ai.geneticalgorithm.evolution.selector.RouletteWheelSelector;
-import de.fhws.ai.geneticalgorithm.evolution.selector.Selector;
-import de.fhws.ai.geneticalgorithm.logger.ConsoleLogger;
-import de.fhws.ai.geneticalgorithm.logger.graphplotter.lines.AvgFitnessLine;
-import de.fhws.ai.geneticalgorithm.logger.graphplotter.GraphPlotLogger;
-import de.fhws.ai.geneticalgorithm.logger.graphplotter.lines.MaxFitnessLine;
-import de.fhws.ai.geneticalgorithm.logger.graphplotter.lines.NQuantilFitnessLine;
-import de.fhws.ai.geneticalgorithm.logger.graphplotter.lines.WorstFitnessLine;
-import de.fhws.ai.geneticalgorithm.populationsupplier.PopulationSupplier;
-import de.fhws.ai.linearalgebra.Randomizer;
-import de.fhws.ai.networktrainer.*;
-import de.fhws.ai.neuralnetwork.NeuralNet;
+import de.fhws.easyml.ai.geneticneuralnet.*;
+import de.fhws.easyml.geneticalgorithm.GeneticAlgorithm;
+import de.fhws.easyml.geneticalgorithm.evolution.Mutator;
+import de.fhws.easyml.geneticalgorithm.evolution.Recombiner;
+import de.fhws.easyml.geneticalgorithm.evolution.selectors.RouletteWheelSelector;
+import de.fhws.easyml.geneticalgorithm.evolution.Selector;
+import de.fhws.easyml.geneticalgorithm.logger.loggers.ConsoleLogger;
+import de.fhws.easyml.geneticalgorithm.logger.loggers.graphplotter.lines.AvgFitnessLine;
+import de.fhws.easyml.geneticalgorithm.logger.loggers.graphplotter.GraphPlotLogger;
+import de.fhws.easyml.geneticalgorithm.logger.loggers.graphplotter.lines.MaxFitnessLine;
+import de.fhws.easyml.geneticalgorithm.logger.loggers.graphplotter.lines.NQuantilFitnessLine;
+import de.fhws.easyml.geneticalgorithm.logger.loggers.graphplotter.lines.WorstFitnessLine;
+import de.fhws.easyml.geneticalgorithm.populationsupplier.PopulationSupplier;
+import de.fhws.easyml.linearalgebra.Randomizer;
+import de.fhws.easyml.ai.neuralnetwork.NeuralNet;
 
 public class Main {
 

@@ -1,6 +1,6 @@
 package example.diabetesprediction;
 
-import de.fhws.ai.linearalgebra.Vector;
+import de.fhws.easyml.linearalgebra.Vector;
 
 public class DiabetesDataSet {
     private final int pregnancies;

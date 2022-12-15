@@ -1,6 +1,6 @@
 package testGeneticAlgorithmBlackBox;
 
-import de.fhws.ai.geneticalgorithm.Individual;
+import de.fhws.easyml.geneticalgorithm.Individual;
 
 import java.util.ArrayList;
 import java.util.Collections;

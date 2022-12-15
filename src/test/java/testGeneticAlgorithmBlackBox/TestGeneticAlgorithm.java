@@ -1,14 +1,14 @@
 package testGeneticAlgorithmBlackBox;
 
-import de.fhws.ai.geneticalgorithm.GeneticAlgorithm;
-import de.fhws.ai.geneticalgorithm.Population;
-import de.fhws.ai.geneticalgorithm.evolution.Mutator;
-import de.fhws.ai.geneticalgorithm.evolution.recombiner.Recombiner;
-import de.fhws.ai.geneticalgorithm.evolution.selector.EliteSelector;
-import de.fhws.ai.geneticalgorithm.evolution.selector.RouletteWheelSelector;
-import de.fhws.ai.geneticalgorithm.evolution.selector.Selector;
-import de.fhws.ai.geneticalgorithm.evolution.selector.TournamentSelector;
-import de.fhws.ai.geneticalgorithm.populationsupplier.PopulationSupplier;
+import de.fhws.easyml.geneticalgorithm.GeneticAlgorithm;
+import de.fhws.easyml.geneticalgorithm.Population;
+import de.fhws.easyml.geneticalgorithm.evolution.Mutator;
+import de.fhws.easyml.geneticalgorithm.evolution.Recombiner;
+import de.fhws.easyml.geneticalgorithm.evolution.selectors.EliteSelector;
+import de.fhws.easyml.geneticalgorithm.evolution.selectors.RouletteWheelSelector;
+import de.fhws.easyml.geneticalgorithm.evolution.Selector;
+import de.fhws.easyml.geneticalgorithm.evolution.selectors.TournamentSelector;
+import de.fhws.easyml.geneticalgorithm.populationsupplier.PopulationSupplier;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
