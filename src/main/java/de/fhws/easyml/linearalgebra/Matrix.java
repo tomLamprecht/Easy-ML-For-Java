@@ -56,11 +56,22 @@ public class Matrix implements Serializable {
      * @param func that should be applied
      */
     public void apply(DoubleUnaryOperator func) {
-    	for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[i].length; j++) {
-				data[i][j] = func.applyAsDouble(data[i][j]);
-			}
-		}
+    	applyAndReturn(func);
+    }
+
+
+    /**
+     * applies the {@code func} on every element and returns the Matrix
+     * @param func that should be applied
+     * @return the Matrix itself
+     */
+    public Matrix applyAndReturn(DoubleUnaryOperator func){
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                data[i][j] = func.applyAsDouble(data[i][j]);
+            }
+        }
+        return this;
     }
 
     
