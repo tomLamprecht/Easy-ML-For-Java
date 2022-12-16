@@ -75,7 +75,7 @@ public class ConvolutionLayer {
 
         public ConvolutionLayer build() {
             List<Filter> filters = Stream
-                    .generate(() -> Filter.createRandomizedFilter(filterRows, filterCols, randomizer, striding, padding))
+                    .generate(() -> Filter.createRandomizedFilter(filterRows, filterCols, randomizer, striding[0], striding[1], padding))
                     .limit(amountOfFilter)
                     .collect(Collectors.toList());
 
