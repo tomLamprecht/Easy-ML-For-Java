@@ -25,11 +25,11 @@ public class Filter {
 
     public Matrix doFiltering(Matrix matrix) {
         int rowStart = padding ? -(feature.getNumRows()-1) : 0;
-        int rowEnd = padding ? matrix.getNumRows() : matrix.getNumRows() - feature.getNumRows();
+        int rowEnd = padding ? matrix.getNumRows() : matrix.getNumRows() - feature.getNumRows() + 1;
         int colStart = padding ? -(feature.getNumCols()-1) : 0;
-        int colEnd = padding ? matrix.getNumCols() : matrix.getNumCols() - feature.getNumCols();
+        int colEnd = padding ? matrix.getNumCols() : matrix.getNumCols() - feature.getNumCols() + 1;
 
-        double[][] resultData = new double[rowEnd-rowStart][colEnd-colStart];
+        double[][] resultData = new double[(int) Math.ceil((rowEnd-rowStart)*1d / rowStriding)][(int)Math.ceil((colEnd-colStart) *1d/ colStriding)];
 
         doFeatureExtraction(matrix, rowStart, rowEnd, colStart, colEnd, resultData);
 
@@ -39,7 +39,7 @@ public class Filter {
     private void doFeatureExtraction(Matrix matrix, int rowStart, int rowEnd, int colStart, int colEnd, double[][] resultData) {
         for (int row = rowStart; row < rowEnd; row+=rowStriding) {
             for (int col = colStart; col < colEnd; col+=colStriding) {
-                resultData[row][col] =extractFeature(matrix.getSubMatrix(row,col, feature.getNumRows(), feature.getNumCols()));
+                resultData[(row-rowStart) / rowStriding][(col-colStart) / colStriding] =extractFeature(matrix.getSubMatrix(row,col, feature.getNumRows(), feature.getNumCols()));
             }
         }
     }

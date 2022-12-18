@@ -109,16 +109,16 @@ public class Matrix implements Serializable {
     public Matrix getSubMatrix(int rowFrom, int colFrom, int rowLen, int colLen){
         var subMatrixData = new double[rowLen][colLen];
             for (int i = Math.max(rowFrom, 0); i < rowFrom + rowLen; i++)
-                subMatrixData[i - rowFrom] = i < getNumRows() ? copyOfRangeWithNegativeStart(data[i], colFrom, colFrom + colLen) : new double[colLen];
+                subMatrixData[i - rowFrom] = i < getNumRows() ? copyOfRangeWithNegativeStart(data[i], colFrom, colFrom + colLen, colLen-1) : new double[colLen];
 
         return new Matrix(subMatrixData);
     }
 
-    private double[] copyOfRangeWithNegativeStart(double[] org, int from, int to){
+    private double[] copyOfRangeWithNegativeStart(double[] org, int from, int to, int offset){
         if(from >= 0)
             return Arrays.copyOfRange(org, from, to);
         double[] values = new double[to-from];
-        System.arraycopy(org, 0, values, -from, to+from+1 );
+        System.arraycopy(org, 0, values, -from, to+from+offset);
         return values;
     }
 
