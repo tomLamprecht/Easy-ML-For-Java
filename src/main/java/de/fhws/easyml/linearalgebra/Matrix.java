@@ -118,7 +118,6 @@ public class Matrix implements Serializable {
         if(from >= 0)
             return Arrays.copyOfRange(org, from, to);
         double[] values = new double[to-from];
-        System.out.println("to " + to + " from " + from);
         System.arraycopy(org, 0, values, -from, to);
         return values;
     }
