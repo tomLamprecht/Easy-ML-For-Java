@@ -1,12 +1,14 @@
 package de.fhws.easyml.ai.convolutionalneuralnetwork.layer.poolinglayer;
 
+import de.fhws.easyml.ai.convolutionalneuralnetwork.layer.Layer;
+import de.fhws.easyml.ai.convolutionalneuralnetwork.layer.OutputSizeInformation;
 import de.fhws.easyml.linearalgebra.Matrix;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PoolingLayer {
+public class PoolingLayer implements Layer {
     int rowSize, colSize;
     Function<Matrix, Double> poolingFunction;
 
@@ -38,17 +40,6 @@ public class PoolingLayer {
         return new Matrix( pooledData );
     }
 
-    /**
-     * calculates the pooled Matrix for all matrices in input
-     *
-     * @param input list of matrices
-     * @return pooled matrices
-     * @see {{@link #pool(Matrix)}}
-     */
-    public List<Matrix> pool( List<Matrix> input ) {
-        return input.stream().map( this::pool ).collect( Collectors.toList() );
-    }
-
     private void insertPooledValuesInto2dArray( Matrix input, double[][] result ) {
         for ( int row = 0; row < input.getNumRows() - rowSize + 1; row += rowSize ) {
             for ( int col = 0; col < input.getNumCols() - colSize + 1; col += colSize ) {
@@ -64,4 +55,20 @@ public class PoolingLayer {
         return new double[resultRows][resultCols];
     }
 
+    /**
+     * calculates the pooled Matrix for all matrices in input
+     *
+     * @param input list of matrices
+     * @return pooled matrices
+     * @see {{@link #pool(Matrix)}}
+     */
+    @Override
+    public List<Matrix> process( List<Matrix> input ) {
+        return input.stream().map( this::pool ).collect( Collectors.toList() );
+    }
+
+    @Override
+    public OutputSizeInformation outputSizeInformation( OutputSizeInformation prevLayer ) {
+        return new OutputSizeInformation( prevLayer.getRows() / rowSize, prevLayer.getCols() / colSize, prevLayer.getChannels() );
+    }
 }

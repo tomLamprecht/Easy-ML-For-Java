@@ -22,7 +22,7 @@ public class NeuralNet implements Serializable {
 
     private NeuralNet( int inputSize ) {
         this.inputSize = inputSize;
-        layers = new ArrayList<>( );
+        layers = new ArrayList<>();
     }
 
     private NeuralNet( int inputSize, List<Layer> layers ) {
@@ -39,8 +39,8 @@ public class NeuralNet implements Serializable {
      * @throws IllegalArgumentException if the size of {@code input} is not the
      *                                  specified one
      */
-    public Vector calcOutput(Vector input ) {
-        return calcAllLayer( input ).get( layers.size( ) - 1 );
+    public Vector calcOutput( Vector input ) {
+        return calcAllLayer( input ).get( layers.size() - 1 );
     }
 
     /**
@@ -63,10 +63,10 @@ public class NeuralNet implements Serializable {
     }
 
     private List<Vector> doCalcLayers( Vector input ) {
-        final List<Vector> list = new ArrayList<>( layers.size( ) );
+        final List<Vector> list = new ArrayList<>( layers.size() );
         list.add( input );
 
-        StreamUtil.of( layers.stream( ) )
+        StreamUtil.of( layers.stream() )
                 .forEachIndexed( ( layer, i ) -> list.add( layer.calcActivation( list.get( i ) ) ) );
 
         list.remove( 0 );
@@ -80,7 +80,7 @@ public class NeuralNet implements Serializable {
     }
 
 
-    public List<Layer> getLayers( ) {
+    public List<Layer> getLayers() {
         return layers;
     }
 
@@ -89,8 +89,8 @@ public class NeuralNet implements Serializable {
      *
      * @return copy of the current NeuralNet
      */
-    public NeuralNet copy( ) {
-        final List<Layer> copiedLayers = new ArrayList<>( );
+    public NeuralNet copy() {
+        final List<Layer> copiedLayers = new ArrayList<>();
 
         layers.forEach( layer -> copiedLayers.add( layer.copy() ) );
 
@@ -101,7 +101,7 @@ public class NeuralNet implements Serializable {
     public static class Builder {
         private final int inputSize;
         private final int outputSize;
-        private final List<Integer> layerSizes = new ArrayList<>( );
+        private final List<Integer> layerSizes = new ArrayList<>();
         private ActivationFunction activationFunction;
         private Randomizer weightRand = new Randomizer( -1, 1 );
         private Randomizer biasRand = new Randomizer( 0, 1 );
@@ -114,8 +114,8 @@ public class NeuralNet implements Serializable {
          *                                  is less than 1
          */
         public Builder( int inputSize, int outputSize ) {
-            Validator.value( inputSize ).isPositiveOrThrow( );
-            Validator.value( outputSize ).isPositiveOrThrow( );
+            Validator.value( inputSize ).isPositiveOrThrow();
+            Validator.value( outputSize ).isPositiveOrThrow();
 
             this.inputSize = inputSize;
             this.outputSize = outputSize;
@@ -127,8 +127,8 @@ public class NeuralNet implements Serializable {
          * any layers
          *
          * @param activationFunction ActivationFunction (Function that accepts Double and returns
-         *              Double) to describe the activation function which is applied on
-         *              every layer on calculation
+         *                           Double) to describe the activation function which is applied on
+         *                           every layer on calculation
          */
         public Builder withActivationFunction( ActivationFunction activationFunction ) {
             this.activationFunction = activationFunction;
@@ -153,9 +153,28 @@ public class NeuralNet implements Serializable {
          * @throws IllegalArgumentException if sizeOfLayer are 0 or smaller
          */
         public Builder addLayer( int sizeOfLayer ) {
-            Validator.value( sizeOfLayer ).isPositiveOrThrow( );
+            Validator.value( sizeOfLayer ).isPositiveOrThrow();
 
             layerSizes.add( sizeOfLayer );
+
+            return this;
+        }
+
+        /**
+         * adds a layer to the neural network with the size based on the size of the previous Layer.
+         * So if {@code relativeSize} is 2 and the previous Layer is of size 10 the resulting Layer would be size 20
+         *
+         * @param relativeSize faktor for the prev Layersize
+         * @return this
+         * @throws IllegalArgumentException if relativeSize is 0 or smaller
+         * @implNote resulting Layer can't be smaller than 1
+         */
+        public Builder addLayerWithSizeRelativeToPrev( double relativeSize ) {
+            Validator.value( relativeSize ).isPositiveOrThrow();
+
+            int prev = layerSizes.isEmpty() ? inputSize : layerSizes.get( layerSizes.size() - 1 );
+
+            layerSizes.add( (int) Math.max( prev * relativeSize, 1 ) );
 
             return this;
         }
@@ -164,13 +183,34 @@ public class NeuralNet implements Serializable {
          * adds the specified amountOfToAddedLayers of layers to the neural network
          *
          * @param amountOfToAddedLayers the amountOfToAddedLayers of layers added
-         * @param sizeOfLayers the number of nodes of the added layers
+         * @param sizeOfLayers          the number of nodes of the added layers
          * @return this
          */
         public Builder addLayers( int amountOfToAddedLayers, int sizeOfLayers ) {
-            Validator.value( amountOfToAddedLayers ).isPositiveOrThrow( );
+            Validator.value( amountOfToAddedLayers ).isPositiveOrThrow();
 
             IntStream.range( 0, amountOfToAddedLayers ).forEach( i -> addLayer( sizeOfLayers ) );
+
+            return this;
+        }
+
+        /**
+         * adds n layers to the neural network with the size based on the size of each previous Layer.
+         * So if {@code relativeSize} is 2 and the previous Layer is of size 10 the resulting Layer would be size 20
+         *
+         * @param relativeSize faktor for the prev Layersize
+         * @param amount amount of layers that will be created
+         * @return this
+         * @throws IllegalArgumentException if relativeSize or amount is 0 or smaller
+         * @implNote resulting Layers can't be smaller than 1
+         */
+        public Builder addLayersWithSizesRelativeToPrev( double relativeSize , int amount) {
+            Validator.value( relativeSize ).isPositiveOrThrow();
+            Validator.value( amount ).isPositiveOrThrow();
+
+            for ( int i = 0; i < amount; i++ )
+                addLayerWithSizeRelativeToPrev( relativeSize );
+
 
             return this;
         }
@@ -193,8 +233,8 @@ public class NeuralNet implements Serializable {
          * @return the built NeuralNet
          * @throws IllegalStateException
          */
-        public NeuralNet build( ) {
-            if (isBuilt.getAndSet( true ))
+        public NeuralNet build() {
+            if ( isBuilt.getAndSet( true ) )
                 throw new IllegalStateException( "this builder has already been used for building" );
 
             layerSizes.add( outputSize );
@@ -203,7 +243,7 @@ public class NeuralNet implements Serializable {
 
             StreamUtil.of( layerSizes.stream() )
                     .forEachWithBefore( inputSize, ( current, before ) ->
-                            nn.layers.add( new Layer( current, before, activationFunction ) ));
+                            nn.layers.add( new Layer( current, before, activationFunction ) ) );
 
             return nn.randomize( weightRand, biasRand );
         }
