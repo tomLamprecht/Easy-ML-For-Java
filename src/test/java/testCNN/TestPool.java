@@ -25,8 +25,7 @@ public class TestPool {
         Matrix result = poolingLayer.pool(BASE_MATRIX);
         double[][] expected = new double[][]{
                 {8,10,11},
-                {19,21,23},
-                {25,27,29}};
+                {19,21,23}};
         assertEquals(Arrays.deepToString(expected),Arrays.deepToString(result.getData()));
     }
 
@@ -35,11 +34,11 @@ public class TestPool {
         PoolingLayer poolingLayer = new AvgPoolingLayer(1,5);
         Matrix result = poolingLayer.pool(BASE_MATRIX);
         double[][] expected = new double[][]{
-                {3,1.2},
-                {9,2.2},
-                {14,3.4},
-                {20,4.6},
-                {26,5.8}};
+                {3},
+                {9},
+                {14},
+                {20},
+                {26}};
         assertEquals(Arrays.deepToString(expected), Arrays.deepToString(result.getData()));
     }
 
