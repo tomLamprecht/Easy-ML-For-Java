@@ -2,13 +2,11 @@ package de.fhws.easyml.linearalgebra;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
-import java.util.stream.IntStream;
 
 public class Vector implements Serializable {
-    private double[] data;
+    private final double[] data;
 
 
     /**
@@ -27,7 +25,7 @@ public class Vector implements Serializable {
      * @param data initial values
      */
     public Vector(double... data) {
-        if (data.length <= 0)
+        if (data.length == 0)
             throw new IllegalArgumentException("data length must be greater than 0");
 
         this.data = new double[data.length];
@@ -84,7 +82,9 @@ public class Vector implements Serializable {
      * @return this vector, after the function was applied
      */
     public Vector apply(DoubleUnaryOperator function) {
-        this.data = Arrays.stream(data).map(function).toArray();
+        for (int i = 0; i < data.length; i++) {
+            data[i] = function.applyAsDouble(data[i]);
+        }
         return this;
     }
 
@@ -94,10 +94,16 @@ public class Vector implements Serializable {
      * @return the index of the biggest number in this vector or -1 if the Vector is empty
      */
     public int getIndexOfBiggest() {
-        return IntStream.range(0, data.length)
-                .boxed()
-                .max(Comparator.comparingDouble(i -> data[i]))
-                .orElse(-1);
+        double max = Double.MIN_VALUE;
+        int maxI = -1;
+        for (int i = 0; i < data.length; i++) {
+            final double val = data[i];
+            if (val > max) {
+                max = val;
+                maxI = i;
+            }
+        }
+        return maxI;
     }
 
     /**
@@ -141,7 +147,7 @@ public class Vector implements Serializable {
     /**
      * creates a copy of this vector
      *
-     * @return
+     * @return a copy of this vector
      */
     public Vector copy() {
         return new Vector(this.data);
