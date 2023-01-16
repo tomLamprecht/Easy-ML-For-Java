@@ -88,6 +88,10 @@ public class Vector implements Serializable {
         return this;
     }
 
+    public Vector applyAsCopy(DoubleUnaryOperator function){
+       return copy().apply( function );
+    }
+
     /**
      * finds the index of the biggest number in this vector
      *

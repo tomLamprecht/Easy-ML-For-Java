@@ -1,6 +1,7 @@
 package de.fhws.easyml.ai.neuralnetwork;
 
 
+import de.fhws.easyml.ai.neuralnetwork.activationfunction.ActivationFunction;
 import de.fhws.easyml.linearalgebra.Vector;
 import de.fhws.easyml.utility.Validator;
 import de.fhws.easyml.linearalgebra.LinearAlgebra;
@@ -44,13 +45,31 @@ public class Layer implements Serializable {
      * @throws IllegalArgumentException if the number of columns of the weights does not fit to the size of activationsOfLayerBefore
      */
     public Vector calcActivation( Vector activationsOfLayerBefore ) {
+        validateActivationsOfLayerBefore( activationsOfLayerBefore );
+
+        return calcOutput( activationsOfLayerBefore ).apply( fActivation );
+    }
+
+    private Vector calcOutput( Vector activationsOfLayerBefore ) {
+        return LinearAlgebra.multiply( weights, activationsOfLayerBefore ).sub( bias );
+    }
+
+    private void validateActivationsOfLayerBefore( Vector activationsOfLayerBefore ) {
         Validator.value( weights.getNumCols( ) )
                 .isEqualToOrThrow(
                         activationsOfLayerBefore.size( ),
                         new IllegalArgumentException( "size of activationsOfLayerBefore must fit with weights columns" )
                 );
+    }
 
-        return LinearAlgebra.multiply( weights, activationsOfLayerBefore ).sub( bias ).apply( fActivation );
+
+    protected TrainingResult feedForward( Vector activationsOfLayerBefore ){
+        validateActivationsOfLayerBefore( activationsOfLayerBefore );
+
+        Vector outputStripped = calcOutput( activationsOfLayerBefore );
+        Vector outputWithActivationFunction = outputStripped.applyAsCopy( fActivation );
+
+        return new TrainingResult( outputStripped, outputWithActivationFunction );
     }
 
     public void randomize( Randomizer weightRand, Randomizer biasRand ) {
@@ -80,8 +99,43 @@ public class Layer implements Serializable {
         return this.bias;
     }
 
+    public ActivationFunction getFActivation() {
+        return fActivation;
+    }
+
     public Layer copy( ) {
         return new Layer( this );
+    }
+
+    public static class TrainingResult{
+        private Vector outputStripped;
+        private Vector outputWithActivationFunction;
+        private Vector dervOfCostFunction;
+
+        public TrainingResult( Vector outputStripped, Vector outputWithActivationFunction ) {
+            this.outputStripped = outputStripped;
+            this.outputWithActivationFunction = outputWithActivationFunction;
+        }
+
+        public Vector getOutputStripped() {
+            return outputStripped;
+        }
+
+        public Vector getOutputWithActivationFunction() {
+            return outputWithActivationFunction;
+        }
+
+        public Vector getDervOfCostFunction() {
+            return dervOfCostFunction;
+        }
+
+        public void setDervOfCostFunction( Vector dervOfCostFunction ) {
+            this.dervOfCostFunction = dervOfCostFunction;
+        }
+
+        public int size(){
+            return outputStripped.size();
+        }
     }
 
 }
