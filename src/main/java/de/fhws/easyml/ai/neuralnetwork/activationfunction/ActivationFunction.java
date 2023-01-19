@@ -13,6 +13,6 @@ public interface ActivationFunction extends DoubleUnaryOperator, Serializable {
     }
 
     default double derivative( double x){
-      throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException("This ActivationFunction doesn't provide an implementation for its derivative");
     }
 }

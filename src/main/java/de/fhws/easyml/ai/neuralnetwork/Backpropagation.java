@@ -10,15 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Backpropagation {
+class Backpropagation {
 
     private final NeuralNet nn;
 
-    public Backpropagation(NeuralNet neuralNet) {
+    protected Backpropagation(NeuralNet neuralNet) {
         this.nn = neuralNet;
     }
 
-    public void trainBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate ) {
+    protected void trainBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate ) {
         Validator.value( inputs.size() ).isEqualToOrThrow( expectedOutputs.size() );
         Validator.value( learningRate ).isBetweenOrThrow( 0, 1 );
 

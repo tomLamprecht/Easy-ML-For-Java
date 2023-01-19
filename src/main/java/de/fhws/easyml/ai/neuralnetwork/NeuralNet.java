@@ -4,20 +4,22 @@ package de.fhws.easyml.ai.neuralnetwork;
 import de.fhws.easyml.ai.neuralnetwork.activationfunction.ActivationFunction;
 import de.fhws.easyml.ai.neuralnetwork.activationfunction.Sigmoid;
 import de.fhws.easyml.ai.neuralnetwork.costfunction.CostFunction;
-import de.fhws.easyml.linearalgebra.Matrix;
+import de.fhws.easyml.linearalgebra.Randomizer;
 import de.fhws.easyml.linearalgebra.Vector;
 import de.fhws.easyml.utility.StreamUtil;
 import de.fhws.easyml.utility.Validator;
-import de.fhws.easyml.linearalgebra.Randomizer;
-import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 public class NeuralNet implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -5984131490435879432L;
 
     int inputSize;
@@ -54,7 +56,7 @@ public class NeuralNet implements Serializable {
      * @param learningRate is the factor on how much impact one batch should have on the weights
      */
     public void trainBatch( List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate ) {
-        new Backpropagation(this).trainBatch(inputs,expectedOutputs, costFunction, learningRate);
+        new Backpropagation(this).trainBatch( inputs, expectedOutputs, costFunction, learningRate );
     }
 
     /**
