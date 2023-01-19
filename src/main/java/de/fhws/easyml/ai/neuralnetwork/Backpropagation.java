@@ -1,6 +1,7 @@
 package de.fhws.easyml.ai.neuralnetwork;
 
 import de.fhws.easyml.ai.neuralnetwork.costfunction.CostFunction;
+import de.fhws.easyml.linearalgebra.ApplyAble;
 import de.fhws.easyml.linearalgebra.Matrix;
 import de.fhws.easyml.linearalgebra.Vector;
 import de.fhws.easyml.utility.Validator;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 class Backpropagation {
 
@@ -22,28 +24,38 @@ class Backpropagation {
         Validator.value( inputs.size() ).isEqualToOrThrow( expectedOutputs.size() );
         Validator.value( learningRate ).isBetweenOrThrow( 0, 1 );
 
-        List<Map<Integer, Matrix>> gradientsList = createGradientsFromBatch( inputs, expectedOutputs, costFunction );
+        List<Map<Integer, GradientsObject>> gradientsList = createGradientsFromBatch( inputs, expectedOutputs, costFunction );
 
-        Map<Integer, Matrix> resultGradients = getAveragedGradients( gradientsList );
+        Map<Integer, GradientsObject> resultGradients = getAveragedGradients( gradientsList );
 
         updateLayers( learningRate, resultGradients );
     }
 
-    private List<Map<Integer, Matrix>> createGradientsFromBatch( List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction ) {
-        List<Map<Integer, Matrix>> gradientsList = new ArrayList<>();
+    private List<Map<Integer, GradientsObject>> createGradientsFromBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction ) {
+        List<Map<Integer, GradientsObject>> gradientsList = new ArrayList<>();
         for ( int i = 0; i < inputs.size(); i++ ) {
             gradientsList.add( calcGradients( inputs.get( i ), expectedOutputs.get( i ), costFunction ) );
-
         }
         return gradientsList;
     }
 
-    private void updateLayers( double learningRate, Map<Integer, Matrix> resultGradients ) {
-        for ( int i = 0; i < nn.layers.size(); i++ )
-            updateLayer( nn.layers.get( i ).getWeights(), learningRate, resultGradients.get( i ) );
+    private void updateLayers( double learningRate, Map<Integer, GradientsObject> resultGradients ) {
+        for ( int i = 0; i < nn.layers.size(); i++ ) {
+            updateLayer(learningRate, resultGradients.get(i), i);
+        }
     }
 
-    private void updateLayer( Matrix cur, double learningRate, Matrix gradients ) {
+    private void updateLayer(double learningRate, GradientsObject resultGradients, int layerIndex) {
+        updateLayerWeights(nn.layers.get(layerIndex).getWeights(), learningRate, resultGradients.weightGradients);
+        updateLayerBiases(nn.layers.get(layerIndex).getBias(), learningRate, resultGradients.biasGradients);
+    }
+
+    private void updateLayerBiases(Vector cur, double learningRate, Vector gradients){
+        for (int i = 0; i < cur.size(); i++)
+            cur.set(i, cur.get( i ) - learningRate * gradients.get( i ) );
+    }
+
+    private void updateLayerWeights(Matrix cur, double learningRate, Matrix gradients ) {
         for ( int row = 0; row < cur.getNumRows(); row++ ) {
             for ( int col = 0; col < cur.getNumCols(); col++ ) {
                 cur.set( row, col, cur.get( row, col ) - learningRate * gradients.get( row, col ) );
@@ -51,8 +63,8 @@ class Backpropagation {
         }
     }
 
-    private Map<Integer, Matrix> getAveragedGradients( List<Map<Integer, Matrix>> gradientsList ) {
-        Map<Integer, Matrix> resultGradients = createEmptyResultGradientMap( gradientsList );
+    private Map<Integer, GradientsObject> getAveragedGradients( List<Map<Integer, GradientsObject>> gradientsList ) {
+        Map<Integer, GradientsObject> resultGradients = createEmptyResultGradientMap( gradientsList );
 
         sumUpGradients( gradientsList, resultGradients );
 
@@ -61,20 +73,39 @@ class Backpropagation {
         return resultGradients;
     }
 
-    private void sumUpGradients( List<Map<Integer, Matrix>> gradientsList, Map<Integer, Matrix> resultGradients ) {
-        for ( Map<Integer, Matrix> gradients : gradientsList ) {
+    private void sumUpGradients( List<Map<Integer, GradientsObject>> gradientsList, Map<Integer, GradientsObject> resultGradients ) {
+        for ( Map<Integer, GradientsObject> gradients : gradientsList ) {
             addGradientsToResult( resultGradients, gradients );
         }
     }
 
-    private void averageOutGradients( List<Map<Integer, Matrix>> gradientsList, Map<Integer, Matrix> resultGradients ) {
-        resultGradients.forEach( ( i, m ) -> m.apply( v -> v / gradientsList.size() ) );
+    private void averageOutGradients( List<Map<Integer, GradientsObject>> gradientsList, Map<Integer, GradientsObject> resultGradients ) {
+        resultGradients.values()
+                .stream()
+                .flatMap(e -> Stream.<ApplyAble<?>>of(e.weightGradients, e.biasGradients))
+                .forEach(a -> a.apply(v -> v / gradientsList.size() ) );
     }
 
-    private void addGradientsToResult( Map<Integer, Matrix> resultGradients, Map<Integer, Matrix> gradients ) {
-        for ( Map.Entry<Integer, Matrix> entry : gradients.entrySet() ) {
-            Matrix resultMatrix = resultGradients.get( entry.getKey() );
-            addEachGradientToResultMatrix( entry.getValue(), resultMatrix );
+    private void addGradientsToResult( Map<Integer, GradientsObject> resultGradients, Map<Integer, GradientsObject> gradients ) {
+        for ( Map.Entry<Integer, GradientsObject> entry : gradients.entrySet() ) {
+            addWeightGradientsToResult(resultGradients, entry);
+            addBiasGradientsToResult(resultGradients, entry);
+        }
+    }
+
+    private void addBiasGradientsToResult(Map<Integer, GradientsObject> resultGradients, Map.Entry<Integer, GradientsObject> entry) {
+        Vector resultVector = resultGradients.get( entry.getKey() ).biasGradients;
+        addEachGradientToResultVector( entry.getValue().biasGradients, resultVector );
+    }
+
+    private void addWeightGradientsToResult(Map<Integer, GradientsObject> resultGradients, Map.Entry<Integer, GradientsObject> entry) {
+        Matrix resultMatrix = resultGradients.get( entry.getKey() ).weightGradients;
+        addEachGradientToResultMatrix( entry.getValue().weightGradients, resultMatrix );
+    }
+
+    private void addEachGradientToResultVector(Vector biasGradients, Vector resultVector) {
+        for (int i = 0; i < resultVector.size(); i++) {
+            resultVector.set(i, resultVector.get( i ) + biasGradients.get( i ) );
         }
     }
 
@@ -86,28 +117,47 @@ class Backpropagation {
         }
     }
 
-    private Map<Integer, Matrix> createEmptyResultGradientMap( List<Map<Integer, Matrix>> gradientsList ) {
-        Map<Integer, Matrix> resultGradients = new HashMap<>();
+    private Map<Integer, GradientsObject> createEmptyResultGradientMap( List<Map<Integer, GradientsObject>> gradientsList ) {
+        Map<Integer, GradientsObject> resultGradients = new HashMap<>();
         for ( int i = 0; i < gradientsList.get( 0 ).size(); i++ ) {
-            resultGradients.put( i, new Matrix( gradientsList.get( 0 ).get( i ).getNumRows(), gradientsList.get( 0 ).get( i ).getNumCols() ) );
+            Matrix resultMatrix = new Matrix( gradientsList.get( 0 ).get( i ).weightGradients.getNumRows(), gradientsList.get( 0 ).get( i ).weightGradients.getNumCols() );
+            Vector resultVector = new Vector(gradientsList.get( 0 ).get( i ).biasGradients.size() );
+            resultGradients.put( i, new GradientsObject(resultMatrix, resultVector));
         }
         return resultGradients;
     }
 
-    private Map<Integer, Matrix> calcGradients( Vector input, Vector expectedOutput, CostFunction costFunction ) {
+    private Map<Integer, GradientsObject> calcGradients( Vector input, Vector expectedOutput, CostFunction costFunction ) {
         nn.validateInputVector( input );
 
         Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult = feedForward( input );
         return backpropagate( expectedOutput, costFunction, layerIndexToTrainingResult, input );
     }
 
-    private Map<Integer, Matrix> backpropagate( Vector expectedOutput, CostFunction costFunction, Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult, Vector input ) {
-        Map<Integer, Matrix> layerIndexToGradient = new HashMap<>();
+    private Map<Integer, GradientsObject> backpropagate( Vector expectedOutput, CostFunction costFunction, Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult, Vector input ) {
+        Map<Integer, GradientsObject> layerIndexToGradient = new HashMap<>();
         for ( int i = nn.layers.size() - 1; i >= 0; i-- ) {
             calculateDerivativesOfCostFunction( i, expectedOutput, costFunction, layerIndexToTrainingResult );
-            layerIndexToGradient.put( i, weightGradientsForEachWeightOfLayer( layerIndexToTrainingResult, i, nn.layers.get( i ), input ) );
+            Matrix weightGradients = weightGradientsForEachWeightOfLayer( layerIndexToTrainingResult, i, nn.layers.get( i ), input );
+            Vector biasGradients = biasGradientsForEachBiasOfLayer( layerIndexToTrainingResult, i, nn.layers.get( i ));
+            layerIndexToGradient.put( i, new GradientsObject(weightGradients, biasGradients));
         }
         return layerIndexToGradient;
+    }
+
+    private Vector biasGradientsForEachBiasOfLayer(Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult, int i, Layer layer) {
+        Vector gradients = new Vector( layer.getBias().size() );
+        for (int j = 0; j < gradients.size(); j++) {
+            double dervOfActivationFunction = getDerivativeOfActivationFunctionFromLayer(layer, j, layerIndexToTrainingResult.get(i));
+            double dervOfCostFunction = layerIndexToTrainingResult.get( i ).getDervOfCostFunction().get( j );
+            double value = dervOfActivationFunction * dervOfCostFunction;
+            gradients.set(j, value);
+        }
+        return gradients;
+    }
+
+    private double getDerivativeOfActivationFunctionFromLayer(Layer layer, int neuronIndex, Layer.TrainingResult trainingResult) {
+        return layer.getFActivation().derivative(trainingResult.getOutputStripped().get(neuronIndex));
     }
 
     private Matrix weightGradientsForEachWeightOfLayer( Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult, int i, Layer layer, Vector input ) {
@@ -115,7 +165,7 @@ class Backpropagation {
         for ( int j = 0; j < gradients.getNumRows(); j++ ) {
             for ( int k = 0; k < gradients.getNumCols(); k++ ) {
                 double neuronKOfPrevLayer = i > 0 ? layerIndexToTrainingResult.get( i - 1 ).getOutputWithActivationFunction().get( k ) : input.get( k );
-                double dervOfActivationFunction = layer.getFActivation().derivative( layerIndexToTrainingResult.get( i ).getOutputStripped().get( j ) );
+                double dervOfActivationFunction = getDerivativeOfActivationFunctionFromLayer(layer, j, layerIndexToTrainingResult.get( i ));
                 double dervOfCostFunction = layerIndexToTrainingResult.get( i ).getDervOfCostFunction().get( j );
                 double value = neuronKOfPrevLayer * dervOfActivationFunction * dervOfCostFunction;
                 gradients.set( j, k, value );
@@ -157,16 +207,12 @@ class Backpropagation {
         double temp = 0;
         for ( int i = 0; i < followingLayer.size(); i++ ) {
             double weightFromNeuronIndexToI = followingLayer.getWeights().get( i, neuronIndex );
-            double dervOfActivationFunctionWithOutputStripped = doDervOfActivationFuncOfLayer( followingLayer, trainingResultFollowingLayer, i );
+            double dervOfActivationFunctionWithOutputStripped = getDerivativeOfActivationFunctionFromLayer( followingLayer, i, trainingResultFollowingLayer );
             double dervOfCostFunctionOfNeuronI = trainingResultFollowingLayer.getDervOfCostFunction().get( i );
             temp = weightFromNeuronIndexToI * dervOfActivationFunctionWithOutputStripped * dervOfCostFunctionOfNeuronI;
 
         }
         return temp;
-    }
-
-    private double doDervOfActivationFuncOfLayer( Layer layer, Layer.TrainingResult trainingResult, int i ) {
-        return layer.getFActivation().derivative( trainingResult.getOutputStripped().get( i ) );
     }
 
     private Map<Integer, Layer.TrainingResult> feedForward( Vector input ) {
@@ -179,6 +225,17 @@ class Backpropagation {
         }
 
         return trainingResults;
+    }
+
+    private static class GradientsObject {
+        final Matrix weightGradients;
+        final Vector biasGradients;
+
+        public GradientsObject(Matrix weightGradients, Vector biasGradients) {
+            this.weightGradients = weightGradients;
+            this.biasGradients = biasGradients;
+        }
+
     }
 
 }

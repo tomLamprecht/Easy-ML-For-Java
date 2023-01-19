@@ -19,21 +19,29 @@ public class TestBackpropagation {
     @Test
     public void testBackpropagation(){
 
-        NeuralNet neuralNet = new NeuralNet.Builder( 2, 1 ).addLayer( 3 ).addLayer( 3 )
-                .withBiasRandomizer( new Randomizer( 0,0 ) )
+        NeuralNet neuralNet = new NeuralNet.Builder( 2, 1 ).addLayer( 5 )
+                .withBiasRandomizer( new Randomizer( 0,1 ) )
                 .withWeightRandomizer( new Randomizer( -1,1 ) )
                 .build();
+
+
+        System.out.println("BIAS:");
+        neuralNet.getLayers().stream().map(Layer::getBias).forEach(System.out::println);
+        System.out.println("BIAS END ");
 
         neuralNet.getLayers().stream().map( Layer::getWeights ).map( Matrix::getData ).map( Arrays::deepToString ).forEach( System.out::println );
         List<Vector> input = getInput();
         List<Vector> output = getOutput();
 
-        for ( int i = 0; i < 100000; i++ ) {
-            neuralNet.trainBatch( input , output , new SummedCostFunction(), 0.7 );
+        for ( int i = 0; i < 100; i++ ) {
+            neuralNet.trainBatch( input , output , new SummedCostFunction(), 0.2 );
         }
         System.out.println();
         neuralNet.getLayers().stream().map( Layer::getWeights ).map( Matrix::getData ).map( Arrays::deepToString ).forEach( System.out::println );
 
+        System.out.println("BIAS:");
+        neuralNet.getLayers().stream().map(Layer::getBias).forEach(System.out::println);
+        System.out.println("BIAS END ");
 
         for ( int i = 0; i < input.size(); i++ ) {
             Vector result = neuralNet.calcOutput( input.get( i ) );
