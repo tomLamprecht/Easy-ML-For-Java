@@ -58,7 +58,7 @@ public class Layer implements Serializable {
         Validator.value( weights.getNumCols( ) )
                 .isEqualToOrThrow(
                         activationsOfLayerBefore.size( ),
-                        new IllegalArgumentException( "size of activationsOfLayerBefore must fit with weights columns" )
+                        () -> new IllegalArgumentException( "size of activationsOfLayerBefore must fit with weights columns" )
                 );
     }
 

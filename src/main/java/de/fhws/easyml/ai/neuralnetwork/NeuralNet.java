@@ -230,7 +230,7 @@ public class NeuralNet implements Serializable {
         Validator.value( input.size() )
                 .isEqualToOrThrow(
                         inputSize,
-                        new IllegalArgumentException( "the input vector must be of the same size as the first layer" )
+                        () -> new IllegalArgumentException( "the input vector must be of the same size as the first layer" )
                 );
     }
 
