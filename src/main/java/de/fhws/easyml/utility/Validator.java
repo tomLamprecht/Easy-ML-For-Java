@@ -32,30 +32,30 @@ public class Validator {
         }
 
         public void isPositiveOrThrow( ) {
-            isPositiveOrThrow( new IllegalArgumentException( "argument must be positive, but was" + value ) );
+            isPositiveOrThrow( () ->new IllegalArgumentException( "argument must be positive, but was" + value ) );
         }
 
-        public void isPositiveOrThrow( RuntimeException exception ) {
+        public void isPositiveOrThrow( Supplier<RuntimeException> exception ) {
             if ( !isPositive( ) )
-                throw exception;
+                throw exception.get();
         }
 
         public void isEqualToOrThrow( double other ) {
-            isEqualToOrThrow( other, new IllegalArgumentException( "argument must be equal to " + other + " but was: " + value ) );
+            isEqualToOrThrow( other, () -> new IllegalArgumentException( "argument must be equal to " + other + " but was: " + value ) );
         }
 
-        public void isEqualToOrThrow( double other, RuntimeException exception ) {
+        public void isEqualToOrThrow( double other, Supplier<RuntimeException> exception ) {
             if ( !isEqualTo( other ) )
-                throw exception;
+                throw exception.get();
         }
 
         public void isBetweenOrThrow( double min, double max ) {
-            isBetweenOrThrow( min, max, new IllegalArgumentException( "argument must be between " + min + " and " + max + " but was: " + value ) );
+            isBetweenOrThrow( min, max,() -> new IllegalArgumentException( "argument must be between " + min + " and " + max + " but was: " + value ) );
         }
 
-        public void isBetweenOrThrow( double min, double max, RuntimeException exception ) {
+        public void isBetweenOrThrow( double min, double max, Supplier<RuntimeException> exception ) {
             if ( !isBetween( min, max ) )
-                throw exception;
+                throw exception.get();
         }
     }
 
@@ -79,12 +79,12 @@ public class Validator {
         }
 
         public void isPositiveOrThrow( ) {
-            isPositiveOrThrow( new IllegalArgumentException( "argument must be positive, but was" + value ) );
+            isPositiveOrThrow( () -> new IllegalArgumentException( "argument must be positive, but was" + value ) );
         }
 
-        public void isPositiveOrThrow( RuntimeException exception ) {
+        public void isPositiveOrThrow( Supplier<RuntimeException> exception ) {
             if ( !isPositive( ) )
-                throw exception;
+                throw exception.get();
         }
 
         public void isEqualToOrThrow( int other ) {
@@ -97,12 +97,12 @@ public class Validator {
         }
 
         public void isBetweenOrThrow( int min, int max ) {
-            isBetweenOrThrow( min, max, new IllegalArgumentException( "argument must be between " + min + " and " + max + " but was: " + value ) );
+            isBetweenOrThrow( min, max,() -> new IllegalArgumentException( "argument must be between " + min + " and " + max + " but was: " + value ) );
         }
 
-        public void isBetweenOrThrow( int min, int max, RuntimeException exception ) {
+        public void isBetweenOrThrow( int min, int max, Supplier<RuntimeException> exception ) {
             if ( !isBetween( min, max ) )
-                throw exception;
+                throw exception.get();
         }
     }
 
