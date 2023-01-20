@@ -2,6 +2,7 @@ package testNeuralNetwork;
 
 import de.fhws.easyml.ai.neuralnetwork.Layer;
 import de.fhws.easyml.ai.neuralnetwork.NeuralNet;
+import de.fhws.easyml.ai.neuralnetwork.activationfunction.Tanh;
 import de.fhws.easyml.ai.neuralnetwork.costfunction.SummedCostFunction;
 import de.fhws.easyml.linearalgebra.Matrix;
 import de.fhws.easyml.linearalgebra.Randomizer;
@@ -19,9 +20,10 @@ public class TestBackpropagation {
     @Test
     public void testBackpropagation(){
 
-        NeuralNet neuralNet = new NeuralNet.Builder( 2, 1 ).addLayer( 5 )
-                .withBiasRandomizer( new Randomizer( 0,1 ) )
+        NeuralNet neuralNet = new NeuralNet.Builder( 2, 1 ).addLayer( 3 )
+                .withBiasRandomizer( new Randomizer( 0,2 ) )
                 .withWeightRandomizer( new Randomizer( -1,1 ) )
+                .withActivationFunction(new Tanh())
                 .build();
 
 
@@ -33,7 +35,7 @@ public class TestBackpropagation {
         List<Vector> input = getInput();
         List<Vector> output = getOutput();
 
-        for ( int i = 0; i < 100; i++ ) {
+        for ( int i = 0; i < 10000; i++ ) {
             neuralNet.trainBatch( input , output , new SummedCostFunction(), 0.2 );
         }
         System.out.println();
@@ -62,10 +64,10 @@ public class TestBackpropagation {
 
     @NotNull
     private List<Vector> getInput() {
-        Vector input1 = new Vector( 0.5,0.5 );
-        Vector input2 = new Vector(0.5,0.88);
-        Vector input3 = new Vector( 0.88,0.5 );
-        Vector input4 = new Vector( 0.88,0.88 );
+        Vector input1 = new Vector( 0,0 );
+        Vector input2 = new Vector(0,0.76);
+        Vector input3 = new Vector( 0.76,0 );
+        Vector input4 = new Vector( 0.76,0.76 );
         List<Vector> input = Stream.of(input1, input2, input3, input4).collect( Collectors.toList());
         return input;
     }

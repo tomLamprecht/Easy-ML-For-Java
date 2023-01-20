@@ -1,5 +1,6 @@
 package de.fhws.easyml.ai.neuralnetwork;
 
+import de.fhws.easyml.ai.neuralnetwork.activationfunction.TempPrinter;
 import de.fhws.easyml.ai.neuralnetwork.costfunction.CostFunction;
 import de.fhws.easyml.linearalgebra.ApplyAble;
 import de.fhws.easyml.linearalgebra.Matrix;
@@ -52,7 +53,7 @@ class Backpropagation {
 
     private void updateLayerBiases(Vector cur, double learningRate, Vector gradients){
         for (int i = 0; i < cur.size(); i++)
-            cur.set(i, cur.get( i ) - learningRate * gradients.get( i ) );
+            cur.set(i, cur.get( i ) + learningRate * gradients.get( i ) );
     }
 
     private void updateLayerWeights(Matrix cur, double learningRate, Matrix gradients ) {
@@ -131,6 +132,8 @@ class Backpropagation {
         nn.validateInputVector( input );
 
         Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult = feedForward( input );
+
+        TempPrinter.print(costFunction.costs(expectedOutput, layerIndexToTrainingResult.get(nn.layers.size()-1).getOutputWithActivationFunction()));
         return backpropagate( expectedOutput, costFunction, layerIndexToTrainingResult, input );
     }
 
