@@ -1,20 +1,15 @@
 package testNeuralNetwork;
 
 import de.fhws.easyml.ai.backpropagation.BackpropagationTrainer;
-import de.fhws.easyml.ai.backpropagation.logger.loggers.ConsoleLogger;
-import de.fhws.easyml.ai.neuralnetwork.Layer;
 import de.fhws.easyml.ai.neuralnetwork.NeuralNet;
 import de.fhws.easyml.ai.neuralnetwork.activationfunction.Tanh;
 import de.fhws.easyml.ai.neuralnetwork.costfunction.SummedCostFunction;
-import de.fhws.easyml.linearalgebra.Matrix;
 import de.fhws.easyml.linearalgebra.Randomizer;
 import de.fhws.easyml.linearalgebra.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class TestBackpropagation {
 
     @Test
-    public void testBackpropagation2(){
+    public void testBackpropagation(){
         NeuralNet neuralNet = new NeuralNet.Builder( 2, 1 ).addLayer( 5 )
                 .withBiasRandomizer( new Randomizer( 0,2 ) )
                 .withWeightRandomizer( new Randomizer( -1,1 ) )
