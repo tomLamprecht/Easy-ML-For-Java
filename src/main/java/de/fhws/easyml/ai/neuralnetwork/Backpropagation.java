@@ -1,11 +1,11 @@
 package de.fhws.easyml.ai.neuralnetwork;
 
-import de.fhws.easyml.ai.neuralnetwork.activationfunction.TempPrinter;
 import de.fhws.easyml.ai.neuralnetwork.costfunction.CostFunction;
 import de.fhws.easyml.linearalgebra.ApplyAble;
 import de.fhws.easyml.linearalgebra.Matrix;
 import de.fhws.easyml.linearalgebra.Vector;
 import de.fhws.easyml.utility.Validator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,30 +13,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-class Backpropagation {
+public class Backpropagation {
 
     private final NeuralNet nn;
 
-    protected Backpropagation(NeuralNet neuralNet) {
+    public Backpropagation(NeuralNet neuralNet) {
         this.nn = neuralNet;
     }
 
-    protected void trainBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate ) {
-        Validator.value( inputs.size() ).isEqualToOrThrow( expectedOutputs.size() );
-        Validator.value( learningRate ).isBetweenOrThrow( 0, 1 );
+    public BatchTrainingResult trainBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate ) {
+        validateTrainingBatchInput(inputs, expectedOutputs, learningRate);
 
-        List<Map<Integer, GradientsObject>> gradientsList = createGradientsFromBatch( inputs, expectedOutputs, costFunction );
-
-        Map<Integer, GradientsObject> resultGradients = getAveragedGradients( gradientsList );
-
-        updateLayers( learningRate, resultGradients );
+        return doTrainBatch(inputs, expectedOutputs, costFunction, learningRate);
     }
 
-    private List<Map<Integer, GradientsObject>> createGradientsFromBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction ) {
+    @NotNull
+    private BatchTrainingResult doTrainBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate) {
+        BatchTrainingResult result = new BatchTrainingResult();
+
+        updateLayers(learningRate, getAveragedGradients(
+                createGradientsFromBatch(inputs, expectedOutputs, costFunction, result )
+        ) );
+        return result;
+    }
+
+    private void validateTrainingBatchInput(List<Vector> inputs, List<Vector> expectedOutputs, double learningRate) {
+        Validator.value( inputs.size() ).isEqualToOrThrow( expectedOutputs.size() );
+        Validator.value(learningRate).isBetweenOrThrow( 0, 1 );
+    }
+
+    private List<Map<Integer, GradientsObject>> createGradientsFromBatch(List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, BatchTrainingResult batchTrainingResult ) {
         List<Map<Integer, GradientsObject>> gradientsList = new ArrayList<>();
-        for ( int i = 0; i < inputs.size(); i++ ) {
-            gradientsList.add( calcGradients( inputs.get( i ), expectedOutputs.get( i ), costFunction ) );
-        }
+        for ( int i = 0; i < inputs.size(); i++ )
+            gradientsList.add( calcGradients( inputs.get( i ), expectedOutputs.get( i ), costFunction, batchTrainingResult ) );
         return gradientsList;
     }
 
@@ -128,13 +137,18 @@ class Backpropagation {
         return resultGradients;
     }
 
-    private Map<Integer, GradientsObject> calcGradients( Vector input, Vector expectedOutput, CostFunction costFunction ) {
+    private Map<Integer, GradientsObject> calcGradients( Vector input, Vector expectedOutput, CostFunction costFunction, BatchTrainingResult batchTrainingResult ) {
         nn.validateInputVector( input );
 
         Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult = feedForward( input );
 
-        TempPrinter.print(costFunction.costs(expectedOutput, layerIndexToTrainingResult.get(nn.layers.size()-1).getOutputWithActivationFunction()));
+        addCostsToTrainingBatchResult(expectedOutput, costFunction, batchTrainingResult, layerIndexToTrainingResult);
+
         return backpropagate( expectedOutput, costFunction, layerIndexToTrainingResult, input );
+    }
+
+    private void addCostsToTrainingBatchResult(Vector expectedOutput, CostFunction costFunction, BatchTrainingResult batchTrainingResult, Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult) {
+        batchTrainingResult.addCost(costFunction.costs(expectedOutput, layerIndexToTrainingResult.get(nn.layers.size() - 1).getOutputWithActivationFunction()));
     }
 
     private Map<Integer, GradientsObject> backpropagate( Vector expectedOutput, CostFunction costFunction, Map<Integer, Layer.TrainingResult> layerIndexToTrainingResult, Vector input ) {
@@ -238,6 +252,28 @@ class Backpropagation {
             this.weightGradients = weightGradients;
             this.biasGradients = biasGradients;
         }
+
+    }
+
+    public static class BatchTrainingResult{
+        private final List<Double> costValues;
+
+        public BatchTrainingResult(List<Double> costValues) {
+            this.costValues = costValues;
+        }
+
+        public BatchTrainingResult(){
+            costValues = new ArrayList<>();
+        }
+
+        public void addCost(double cost){
+            costValues.add(cost);
+        }
+
+        public double avg(){
+            return costValues.stream().mapToDouble(x -> x).average().orElse(0);
+        }
+
 
     }
 

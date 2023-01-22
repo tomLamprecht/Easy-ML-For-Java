@@ -48,16 +48,7 @@ public class NeuralNet implements Serializable {
         return calcAllLayer( input ).get( layers.size() - 1 );
     }
 
-    /**
-     * Trains the Neural Network using a backpropagation approach
-     * @param inputs into the neural network as {@link Vector}
-     * @param expectedOutputs of the neural network as {@link Vector}
-     * @param costFunction function to calculate the costs of the neural network
-     * @param learningRate is the factor on how much impact one batch should have on the weights
-     */
-    public void trainBatch( List<Vector> inputs, List<Vector> expectedOutputs, CostFunction costFunction, double learningRate ) {
-        new Backpropagation(this).trainBatch( inputs, expectedOutputs, costFunction, learningRate );
-    }
+
 
     /**
      * calculates the output based on the given input vector
