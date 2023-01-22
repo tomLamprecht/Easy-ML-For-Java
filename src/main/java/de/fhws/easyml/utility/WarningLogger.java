@@ -11,4 +11,12 @@ public abstract class WarningLogger
 		return logger;
 	}
 
+	public static Logger createWarningLogger(Class<?> clazz){
+		return createWarningLogger( clazz.getName() );
+	}
+
+	public static Logger createWarningLogger(Object obj){
+		return createWarningLogger( obj.getClass() );
+	}
+
 }

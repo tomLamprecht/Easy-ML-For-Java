@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-public class Vector implements Serializable {
+public class Vector implements Serializable, ApplyAble<Vector> {
     private final double[] data;
 
 
@@ -81,11 +81,16 @@ public class Vector implements Serializable {
      * @param function function which is applied to every value of the vector
      * @return this vector, after the function was applied
      */
+    @Override
     public Vector apply(DoubleUnaryOperator function) {
         for (int i = 0; i < data.length; i++) {
             data[i] = function.applyAsDouble(data[i]);
         }
         return this;
+    }
+
+    public Vector applyAsCopy(DoubleUnaryOperator function){
+       return copy().apply( function );
     }
 
     /**

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 
-public class Matrix implements Serializable {
+public class Matrix implements Serializable, ApplyAble<Matrix> {
 
     private double[][] data;
 
@@ -55,12 +55,14 @@ public class Matrix implements Serializable {
      * applies the {@code func} on every element
      * @param func that should be applied
      */
-    public void apply(DoubleUnaryOperator func) {
+    @Override
+    public Matrix apply(DoubleUnaryOperator func) {
     	for (int i = 0; i < data.length; i++) {
 			for (int j = 0; j < data[i].length; j++) {
 				data[i][j] = func.applyAsDouble(data[i][j]);
 			}
 		}
+    	return this;
     }
 
     

@@ -1,11 +1,15 @@
 package de.fhws.easyml.ai.neuralnetwork;
 
 
+import de.fhws.easyml.ai.neuralnetwork.activationfunction.ActivationFunction;
+import de.fhws.easyml.ai.neuralnetwork.activationfunction.Sigmoid;
+import de.fhws.easyml.ai.neuralnetwork.costfunction.CostFunction;
+import de.fhws.easyml.linearalgebra.Randomizer;
 import de.fhws.easyml.linearalgebra.Vector;
 import de.fhws.easyml.utility.StreamUtil;
 import de.fhws.easyml.utility.Validator;
-import de.fhws.easyml.linearalgebra.Randomizer;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,14 +19,15 @@ import java.util.stream.IntStream;
 
 public class NeuralNet implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -5984131490435879432L;
 
     int inputSize;
-    private final List<Layer> layers;
+    protected final List<Layer> layers;
 
     private NeuralNet( int inputSize ) {
         this.inputSize = inputSize;
-        layers = new ArrayList<>( );
+        layers = new ArrayList<>();
     }
 
     private NeuralNet( int inputSize, List<Layer> layers ) {
@@ -39,9 +44,11 @@ public class NeuralNet implements Serializable {
      * @throws IllegalArgumentException if the size of {@code input} is not the
      *                                  specified one
      */
-    public Vector calcOutput(Vector input ) {
-        return calcAllLayer( input ).get( layers.size( ) - 1 );
+    public Vector calcOutput( Vector input ) {
+        return calcAllLayer( input ).get( layers.size() - 1 );
     }
+
+
 
     /**
      * calculates the output based on the given input vector
@@ -53,20 +60,24 @@ public class NeuralNet implements Serializable {
      *                                  specified one
      */
     public List<Vector> calcAllLayer( Vector input ) {
+        validateInputVector( input );
+
+        return doCalcLayers( input );
+    }
+
+    protected void validateInputVector( Vector input ) {
         Validator.value( input.size() )
                 .isEqualToOrThrow(
                         inputSize,
                         () -> new IllegalArgumentException( "the input vector must be of the same size as the first layer" )
                 );
-
-        return doCalcLayers( input );
     }
 
     private List<Vector> doCalcLayers( Vector input ) {
-        final List<Vector> list = new ArrayList<>( layers.size( ) );
+        final List<Vector> list = new ArrayList<>( layers.size() );
         list.add( input );
 
-        StreamUtil.of( layers.stream( ) )
+        StreamUtil.of( layers.stream() )
                 .forEachIndexed( ( layer, i ) -> list.add( layer.calcActivation( list.get( i ) ) ) );
 
         list.remove( 0 );
@@ -80,7 +91,7 @@ public class NeuralNet implements Serializable {
     }
 
 
-    public List<Layer> getLayers( ) {
+    public List<Layer> getLayers() {
         return layers;
     }
 
@@ -89,8 +100,8 @@ public class NeuralNet implements Serializable {
      *
      * @return copy of the current NeuralNet
      */
-    public NeuralNet copy( ) {
-        final List<Layer> copiedLayers = new ArrayList<>( );
+    public NeuralNet copy() {
+        final List<Layer> copiedLayers = new ArrayList<>();
 
         layers.forEach( layer -> copiedLayers.add( layer.copy() ) );
 
@@ -101,7 +112,7 @@ public class NeuralNet implements Serializable {
     public static class Builder {
         private final int inputSize;
         private final int outputSize;
-        private final List<Integer> layerSizes = new ArrayList<>( );
+        private final List<Integer> layerSizes = new ArrayList<>();
         private ActivationFunction activationFunction;
         private Randomizer weightRand = new Randomizer( -1, 1 );
         private Randomizer biasRand = new Randomizer( 0, 1 );
@@ -114,12 +125,12 @@ public class NeuralNet implements Serializable {
          *                                  is less than 1
          */
         public Builder( int inputSize, int outputSize ) {
-            Validator.value( inputSize ).isPositiveOrThrow( );
-            Validator.value( outputSize ).isPositiveOrThrow( );
+            Validator.value( inputSize ).isPositiveOrThrow();
+            Validator.value( outputSize ).isPositiveOrThrow();
 
             this.inputSize = inputSize;
             this.outputSize = outputSize;
-            activationFunction = d -> ( 1 + Math.tanh( d / 2 ) ) / 2;
+            activationFunction = new Sigmoid();
         }
 
         /**
@@ -127,8 +138,8 @@ public class NeuralNet implements Serializable {
          * any layers
          *
          * @param activationFunction ActivationFunction (Function that accepts Double and returns
-         *              Double) to describe the activation function which is applied on
-         *              every layer on calculation
+         *                           Double) to describe the activation function which is applied on
+         *                           every layer on calculation
          */
         public Builder withActivationFunction( ActivationFunction activationFunction ) {
             this.activationFunction = activationFunction;
@@ -153,7 +164,7 @@ public class NeuralNet implements Serializable {
          * @throws IllegalArgumentException if sizeOfLayer are 0 or smaller
          */
         public Builder addLayer( int sizeOfLayer ) {
-            Validator.value( sizeOfLayer ).isPositiveOrThrow( );
+            Validator.value( sizeOfLayer ).isPositiveOrThrow();
 
             layerSizes.add( sizeOfLayer );
 
@@ -164,11 +175,11 @@ public class NeuralNet implements Serializable {
          * adds the specified amountOfToAddedLayers of layers to the neural network
          *
          * @param amountOfToAddedLayers the amountOfToAddedLayers of layers added
-         * @param sizeOfLayers the number of nodes of the added layers
+         * @param sizeOfLayers          the number of nodes of the added layers
          * @return this
          */
         public Builder addLayers( int amountOfToAddedLayers, int sizeOfLayers ) {
-            Validator.value( amountOfToAddedLayers ).isPositiveOrThrow( );
+            Validator.value( amountOfToAddedLayers ).isPositiveOrThrow();
 
             IntStream.range( 0, amountOfToAddedLayers ).forEach( i -> addLayer( sizeOfLayers ) );
 
@@ -193,8 +204,8 @@ public class NeuralNet implements Serializable {
          * @return the built NeuralNet
          * @throws IllegalStateException
          */
-        public NeuralNet build( ) {
-            if (isBuilt.getAndSet( true ))
+        public NeuralNet build() {
+            if ( isBuilt.getAndSet( true ) )
                 throw new IllegalStateException( "this builder has already been used for building" );
 
             layerSizes.add( outputSize );
@@ -203,7 +214,7 @@ public class NeuralNet implements Serializable {
 
             StreamUtil.of( layerSizes.stream() )
                     .forEachWithBefore( inputSize, ( current, before ) ->
-                            nn.layers.add( new Layer( current, before, activationFunction ) ));
+                            nn.layers.add( new Layer( current, before, activationFunction ) ) );
 
             return nn.randomize( weightRand, biasRand );
         }
