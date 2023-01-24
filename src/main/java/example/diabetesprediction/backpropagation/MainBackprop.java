@@ -34,7 +34,7 @@ public class MainBackprop {
         // Random Bias between -0.2 and 0.
         NeuralNet neuralNet = new NeuralNet.Builder(8, 1)
                 .addLayer(5)
-                .addLayer(2)
+                .addLayer(3)
                 .withWeightRandomizer(new Randomizer(-0.005, 0.005))
                 .withBiasRandomizer(new Randomizer(0, 0.01))
                 .withActivationFunction(new Sigmoid())
@@ -52,12 +52,13 @@ public class MainBackprop {
             return new BackpropagationTrainer.Batch(dataList.stream().map(DiabetesDataSet::toVector).collect(Collectors.toList()), expectedOutput );
         };
 
-        new BackpropagationTrainer.Builder(neuralNet, batchSupplier, 0.05, 100000)
-                .withLogger(new ConsoleLogger())
+        System.out.println("Training...");
+        new BackpropagationTrainer.Builder(neuralNet, batchSupplier, 0.2, 40000)
+               // .withLogger(new ConsoleLogger())
                 .build()
                 .train();
 
-       // testModel(inputParser, neuralNet);
+        testModel(inputParser, neuralNet);
     }
 
     public static void testModel(InputParser inputParser, NeuralNet model) {
