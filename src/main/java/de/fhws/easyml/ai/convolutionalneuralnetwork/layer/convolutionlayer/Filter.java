@@ -7,19 +7,22 @@ public class Filter {
     private final Matrix feature;
     private final int rowStriding;
     private final int colStriding;
+    private final double bias;
     private final boolean padding;
 
-    public Filter( Matrix feature, int rowStriding, int colStriding, boolean padding ) {
+
+    public Filter( Matrix feature, double bias, int rowStriding, int colStriding, boolean padding ) {
         this.feature = feature;
+        this.bias = bias;
         this.rowStriding = rowStriding;
         this.colStriding = colStriding;
         this.padding = padding;
     }
 
-    public static Filter createRandomizedFilter( int row, int col, Randomizer randomizer, int rowStriding, int colStriding, boolean doPadding ) {
+    public static Filter createRandomizedFilter( int row, int col, Randomizer featureRadomizer, Randomizer biasRandomizer, int rowStriding, int colStriding, boolean doPadding ) {
         Matrix feature = new Matrix( row, col );
-        feature.randomize( randomizer );
-        return new Filter( feature, rowStriding, colStriding, doPadding );
+        feature.randomize( featureRadomizer );
+        return new Filter( feature, biasRandomizer.getInRange(), rowStriding, colStriding, doPadding );
     }
 
     protected int calculateResultDataRows( int orgRows ) {
@@ -74,7 +77,7 @@ public class Filter {
 
         for ( int row = rowStart; row < rowEnd; row += rowStriding ) {
             for ( int col = colStart; col < colEnd; col += colStriding ) {
-                resultData[( row - rowStart ) / rowStriding][( col - colStart ) / colStriding] = extractFeature( matrix.getSubMatrix( row, col, feature.getNumRows(), feature.getNumCols() ) );
+                resultData[( row - rowStart ) / rowStriding][( col - colStart ) / colStriding] = extractFeature( matrix.getSubMatrix( row, col, feature.getNumRows(), feature.getNumCols() ) ) + bias;
             }
         }
         return resultData;

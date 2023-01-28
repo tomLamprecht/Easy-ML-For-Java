@@ -66,7 +66,8 @@ public class ConvolutionLayer implements Layer {
 
 
     public static class Builder {
-        public static final Randomizer DEFAULT_RANDOMIZER = new Randomizer( -1, 1 );
+        public static final Randomizer DEFAULT_FEATURE_RANDOMIZER = new Randomizer( -0.1, 0.1 );
+        public static final Randomizer DEFAULT_BIAS_RANDOMIZER = new Randomizer( 0, 0.1 );
         public static final int[] DEFAULT_STRIDING = new int[]{ 1, 1 };
         public static final boolean DEFAULT_PADDING_STATE = false;
         public static final ActivationFunction RELU = ( x ) -> x < 0 ? 0 : x;
@@ -74,7 +75,8 @@ public class ConvolutionLayer implements Layer {
         private final int filterRows, filterCols;
         private final int amountOfFilter;
 
-        private Randomizer randomizer = DEFAULT_RANDOMIZER;
+        private Randomizer featureRandomizer = DEFAULT_FEATURE_RANDOMIZER;
+        private Randomizer biasRandomizer = DEFAULT_BIAS_RANDOMIZER;
         private final int[] striding = DEFAULT_STRIDING;
         private boolean padding = DEFAULT_PADDING_STATE;
         private ActivationFunction activationFunction = RELU;
@@ -89,11 +91,15 @@ public class ConvolutionLayer implements Layer {
             this.amountOfFilter = amountOfFilter;
         }
 
-        public Builder withRandomizer( Randomizer randomizer ) {
-            this.randomizer = randomizer;
+        public Builder withFeatureRandomizer(Randomizer randomizer ) {
+            this.featureRandomizer = randomizer;
             return this;
         }
 
+        public Builder withBiasRandomizer(Randomizer randomizer){
+            this.biasRandomizer = randomizer;
+            return this;
+        }
 
         public Builder withPadding( boolean padding ) {
             this.padding = padding;
@@ -113,7 +119,7 @@ public class ConvolutionLayer implements Layer {
 
         public ConvolutionLayer build() {
             List<Filter> filters = Stream
-                    .generate( () -> Filter.createRandomizedFilter( filterRows, filterCols, randomizer, striding[0], striding[1], padding ) )
+                    .generate( () -> Filter.createRandomizedFilter( filterRows, filterCols, featureRandomizer, biasRandomizer, striding[0], striding[1], padding ) )
                     .limit( amountOfFilter )
                     .collect( Collectors.toList() );
 
