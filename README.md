@@ -1,3 +1,5 @@
+
+
 <h1 align="center"> Easy ML for Java</h1>
   <p align="center">
     The easiest way to start with Machine Learning in Java!
@@ -5,7 +7,9 @@
     <br />
     <a href="https://easy-ml.gitbook.io/easy-ml-for-java/"><strong>Explore our Website»</strong></a>
     <br />
-  </p>
+</p>
+
+
 
 ## **Version 1.0**
 <div>
@@ -14,7 +18,11 @@
     <image src="https://img.shields.io/github/commit-activity/m/tomLamprecht/easy-ml-for-java"/>
     <image src="https://img.shields.io/github/languages/top/tomLamprecht/easy-ml-for-java"/>
     <image src="https://img.shields.io/snyk/vulnerabilities/github/tomLamprecht/easy-ml-for-java"/>
+    
 </div>
+
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Try%20out%20this%20Machine%20Learning%20Framework%20for%20Java%20that%20I%20discovered!&url=https://github.com/tomLamprecht/Easy-ML-For-Java&via=tomLamprecht&hashtags=machinelearning,java,ai,opensource,developers)
+
 ---
 
 # Overview
